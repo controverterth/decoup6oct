@@ -1,0 +1,1097 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="รื้อคดี 6 ตุลา — เกมสืบหลักฐานว่าด้วยรัฐประหาร 6 ตุลาคม 2519 และคำสั่งคณะปฏิรูปการปกครองแผ่นดิน ฉบับที่ 41">
+<style>html,body{margin:0;padding:0}img{max-width:100%}</style>
+<title>รื้อคดี 6 ตุลา</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = { theme: { extend: {
+  colors: { cream:'#EFE6D2', ink:'#1A1613', room:'#221D19', board:'#181410', red:'#C4262E', gold:'#B9964A', mute:'#6E645A', line:'#3A322C' },
+  fontFamily: { sans:['"IBM Plex Sans Thai"','Sarabun','system-ui','sans-serif'] },
+} } };
+</script>
+<style>
+  :root{ color-scheme:dark; }
+  html,body{ height:100% }
+  body{ background:#221D19; color:#EFE6D2; font-family:'IBM Plex Sans Thai',Sarabun,system-ui,sans-serif; font-size:15px; -webkit-font-smoothing:antialiased; }
+  .room{ background:#221D19; }
+  .board{ background:#181410; border:1px solid #3A322C; }
+  .tab{ border:1px solid #3A322C; color:#9C9187; padding:6px 14px; font-size:13px; font-weight:500; white-space:nowrap; }
+  .tab.on{ border-color:#C4262E; background:#C4262E; color:#EFE6D2; }
+  .tab.gold{ border-color:#B9964A; color:#B9964A; }
+  .btn{ font-weight:600; font-size:14px; padding:9px 18px; border:1px solid transparent; transition:opacity .15s; }
+  .btn:active{ opacity:.8 } .btn:disabled{ opacity:.4; cursor:not-allowed }
+  .btn-red{ background:#C4262E; color:#EFE6D2; }
+  .btn-outline{ border-color:#B9964A; color:#B9964A; background:transparent; }
+  .btn-ghost{ border-color:#3A322C; color:#EFE6D2; background:transparent; }
+
+  /* ---- evidence cards ---- */
+  .card{ position:relative; background:#EFE6D2; color:#1A1613; box-shadow:0 8px 18px -10px rgba(0,0,0,.9), 0 1px 2px rgba(0,0,0,.4); }
+  .card .pin{ position:absolute; top:-8px; left:50%; width:14px; height:14px; margin-left:-7px; border-radius:50%; z-index:2;
+    background:radial-gradient(circle at 35% 30%, #f06a6a, #C4262E 45%, #6e0d13); box-shadow:0 2px 3px rgba(0,0,0,.6); }
+  .card .pin.grey{ background:radial-gradient(circle at 35% 30%, #ddd, #8b8580 45%, #4a4541); }
+  .card .strip{ height:6px; background:#C4262E; }
+  .card .body{ padding:10px 12px 12px; }
+  .card .ttl{ font-weight:600; font-size:15px; line-height:1.3; }
+  .card .sub{ font-size:12px; color:#6E645A; margin-top:3px; line-height:1.35; }
+  .card .dot{ position:absolute; right:12px; bottom:12px; width:12px; height:12px; border-radius:50%; background:#C4262E; }
+  .card.selected{ outline:2px solid #C4262E; outline-offset:2px; }
+  .card.dim{ opacity:.35 }
+  /* kinds */
+  .card.k-doc .strip{ background:#C4262E; }
+  .card.k-file .strip{ background:#1A1613; }
+  .card.k-news .strip{ height:auto; background:transparent; border-top:3px double #1A1613; margin:8px 12px 0; padding-top:3px; font-size:9px; letter-spacing:.2em; color:#6E645A; text-align:center; }
+  .card.k-news .body{ padding-top:6px; }
+  .card.k-news .cols{ height:14px; margin-top:8px; background:repeating-linear-gradient(90deg,#1A1613 0 1px,transparent 1px 33%) , repeating-linear-gradient(0deg,#cfc5b0 0 1px,transparent 1px 4px); opacity:.5; }
+  .card.k-tape .strip{ height:30px; background:#2B2622; display:flex; align-items:center; justify-content:center; gap:36px; }
+  .card.k-tape .reel{ width:16px; height:16px; border-radius:50%; border:3px solid #EFE6D2; box-shadow:0 0 0 2px #2B2622, 0 0 0 3px #6E645A; }
+  .card.k-film .strip, .card.k-film .strip2{ height:10px; background:#1A1613 repeating-linear-gradient(90deg, transparent 0 6px, #EFE6D2 6px 12px, transparent 12px 18px); background-size:18px 5px; background-repeat:repeat-x; background-position:0 2.5px; }
+  .card.k-film .strip{ background-color:#1A1613; }
+  .card.k-photo{ padding:8px 8px 0; }
+  .card.k-photo .strip{ height:54px; background:#2B2622 linear-gradient(135deg,#3a332d,#211c18); }
+  .card.k-photo .body{ padding:8px 4px 12px; }
+  .card.k-locked{ background:#2B2622; color:#9C9187; border:1px solid #B9964A; }
+  .card.k-locked .strip{ background:#B9964A; }
+
+  /* mini cards on the final board */
+  .card.mini .body{ padding:6px 8px 8px; }
+  .card.mini .ttl{ font-size:12px; line-height:1.25; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; min-height:30px; }
+  .card.mini .strip{ height:5px; }
+  .card.mini.k-tape .strip{ height:14px; gap:18px; } .card.mini .reel{ width:8px; height:8px; border-width:2px; }
+  .card.mini.k-photo{ padding:4px 4px 0; } .card.mini.k-photo .strip{ height:22px; } .card.mini.k-photo .body{ padding:6px 4px 8px; }
+  .card.mini.k-news .strip{ height:auto; margin:4px 8px 0; font-size:8px; } .card.mini.k-film .strip, .card.mini.k-film .strip2{ height:7px; background-size:12px 3px; background-position:0 2px; }
+  .card.mini .dot{ width:8px; height:8px; right:8px; bottom:8px; } .card.mini .pin{ width:10px; height:10px; margin-left:-5px; top:-5px; }
+  .thread{ stroke:#C4262E; stroke-width:2.5; fill:none; stroke-linecap:round; }
+  .thread-thin{ stroke:#C4262E; stroke-width:1.2; fill:none; opacity:.7; }
+  .thread-gold{ stroke:#B9964A; stroke-width:1.6; fill:none; opacity:.85; }
+  .fade-in{ animation:fadeIn .4s ease both; }
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
+  .pop-in{ animation:popIn .3s ease both; }
+  @keyframes popIn{ from{opacity:0; transform:scale(.96)} to{opacity:1; transform:scale(1)} }
+  .chaos-card{ position:absolute; transition:all 1.3s cubic-bezier(.6,0,.2,1); }
+  .modal-backdrop{ background:rgba(10,8,6,.8); }
+  .scroll-x{ overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:thin; scrollbar-color:#C4262E transparent; }
+  .scroll-y{ overflow-y:auto; scrollbar-width:thin; scrollbar-color:#C4262E transparent; }
+  button:focus-visible,a:focus-visible{ outline:2px solid #B9964A; outline-offset:2px; }
+  .sidebox{ border:1px solid #3A322C; padding:10px 12px; }
+  .sidebox.on{ border-left:3px solid #C4262E; }
+  .chip{ display:inline-block; width:6px; height:6px; border-radius:50%; background:#B9964A; margin-right:3px; }
+  .chip.off{ background:#3A322C; }
+  @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
+</style>
+
+</head>
+<body>
+<div id="root" class="room min-h-full"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
+
+<!-- ============================================================
+     DATA LAYER — โครงสร้างเดียวกับ Google Sheet / CSV
+     คอลัมน์: id, element, title, sub_title, date, image_url, link_to_scene, ref
+     คอลัมน์เสริม (ไม่บังคับ): kind = doc | file | news | tape | film | photo
+       ถ้าไม่ใส่ ระบบเดาจากคำใน element และ image_url (ดู guessKind)
+     ============================================================ -->
+<script>
+window.FRAGMENTS = [
+ {
+  "id": "0.1",
+  "element": "พิธีลงนามสนธิสัญญามะนิลา",
+  "title": "สงครามเย็นถูกเซ็นที่กรุงเทพฯ",
+  "sub_title": "SEATO ก่อตั้งจากสนธิสัญญามะนิลา สำนักงานใหญ่ตั้งในกรุงเทพฯ เลขาธิการคนแรกเป็นคนไทย",
+  "date": "8 ก.ย. 2497",
+  "image_url": "https://en.wikipedia.org/wiki/Southeast_Asia_Treaty_Organization#/media/File:President_Marcos_and_US_President_Johnson_at_the_SEATO_Conference_at_Malaca%C3%B1ang_Palace_in_1966.jpg",
+  "link_to_scene": "1.1 ภาพโฆษณาชวนเชื่อ ฝ่ายรัฐ หาเพิ่มเติมได้จากหอจดหมายเหตุกองทัพเมกัน, 1.2 วัตถุบางชิ้นจากพิพิธ, 1.3 หนังสือเพื่อชีวิต, 1.4 ภาพถ่ายเก่า, 1.5 หนังสือพิมพ์เก่า (หอสมุดมธ), 1.6 สิ่งเกี่ยวกับลูกเสือชาวบ้าน นวพล, 1.7 เสียงวิทยุ, 1.8 จัดตั้ง กอรมน./ กอ.ปค., 1.9 โปสเตอร์ต่อต้านถนอม, 1.10 เพลงของขบวนการคอมมิวเนิสต์ (ตัดได้)",
+  "ref": ""
+ },
+ {
+  "id": "0.2",
+  "element": "แผนที่ Domino คอมมิวนิสต์",
+  "title": "ทฤษฎีโดมิโน",
+  "sub_title": "กรอบคิดที่ทำให้การปราบปรามภายในประเทศถูกอธิบายว่าเป็นการป้องกันประเทศ",
+  "date": "2497–2518",
+  "image_url": "https://alphahistory.com/coldwar/wp-content/uploads/2012/07/map.jpg",
+  "link_to_scene": "1.1 ภาพโฆษณาชวนเชื่อ ฝ่ายรัฐ หาเพิ่มเติมได้จากหอจดหมายเหตุกองทัพเมกัน, 1.2 วัตถุบางชิ้นจากพิพิธ, 1.3 หนังสือเพื่อชีวิต, 1.4 ภาพถ่ายเก่า, 1.5 หนังสือพิมพ์เก่า (หอสมุดมธ), 1.6 สิ่งเกี่ยวกับลูกเสือชาวบ้าน นวพล, 1.7 เสียงวิทยุ, 1.8 จัดตั้ง กอรมน./ กอ.ปค., 1.9 โปสเตอร์ต่อต้านถนอม, 1.10 เพลงของขบวนการคอมมิวเนิสต์ (ตัดได้)",
+  "ref": ""
+ },
+ {
+  "id": "0.3",
+  "element": "ไซง่อนแตก",
+  "title": "ไซ่ง่อนแตก",
+  "sub_title": "ไซ่ง่อนแตก ความหวาดกลัวคอมมิวนิสต์พุ่งสูงสุดในรอบสองทศวรรษ",
+  "date": "2518",
+  "image_url": "https://i.guim.co.uk/img/static/sys-images/Guardian/Pix/pictures/2015/4/21/1429636735711/b829d36c-ae98-4a6d-a508-5b5382d4719f-1020x612.jpeg?width=700&quality=85&auto=format&fit=max&s=b95ee62808b57ee170ac19f4ac60d966",
+  "link_to_scene": "1.1 ภาพโฆษณาชวนเชื่อ ฝ่ายรัฐ หาเพิ่มเติมได้จากหอจดหมายเหตุกองทัพเมกัน, 1.2 วัตถุบางชิ้นจากพิพิธ, 1.3 หนังสือเพื่อชีวิต, 1.4 ภาพถ่ายเก่า, 1.5 หนังสือพิมพ์เก่า (หอสมุดมธ), 1.6 สิ่งเกี่ยวกับลูกเสือชาวบ้าน นวพล, 1.7 เสียงวิทยุ, 1.8 จัดตั้ง กอรมน./ กอ.ปค., 1.9 โปสเตอร์ต่อต้านถนอม, 1.10 เพลงของขบวนการคอมมิวเนิสต์ (ตัดได้)",
+  "ref": ""
+ },
+ {
+  "id": "1.1",
+  "element": "ภาพโฆษณาชวนเชื่อ ฝ่ายรัฐ หาเพิ่มเติมได้จากหอจดหมายเหตุกองทัพเมกัน",
+  "title": "คอมมิวนิสต์ หรือเสรีภาพ",
+  "sub_title": "โฆษณาชวนเชื่อเพื่อสร้างจินตภาพเกี่ยวกับสังคมคอมมิวนิสต์",
+  "date": "",
+  "image_url": "https://waymagazine.org/movie-brainwash-1/",
+  "link_to_scene": "2.10 ต้นมะขาม + เก้าอี้พับ, 2.3 ดาวสยาม ฉบับบ่าย 4, 2.4 ใบแจ้งความ สน.ชนะสงคราม",
+  "ref": ""
+ },
+ {
+  "id": "1.2",
+  "element": "วัตถุบางชิ้นจากพิพิธ",
+  "title": "กฎหมายที่รออยู่ 24 ปี",
+  "sub_title": "พ.ร.บ.ป้องกันการกระทำอันเป็นคอมมิวนิสต์ เป็นข้อหาหลักในคดี 6 ตุลาจริง ๆ พร้อมอำนาจคุมขังยาว 30+60+90x3 วัน",
+  "date": "",
+  "image_url": "https://ratchakitcha.soc.go.th/documents/1146191.pdf",
+  "link_to_scene": "2.4 ใบแจ้งความ สน.ชนะสงคราม",
+  "ref": ""
+ },
+ {
+  "id": "1.3",
+  "element": "หนังสือเพื่อชีวิต",
+  "title": "หนังสือต้องห้าม วรรณกรรมเพื่อชีวิต",
+  "sub_title": "วรรณกรรมเพื่อชีวิตเฟื่องฟูหลัง 14 ตุลา และต่อมาถูกใช้เป็นหลักฐานประกอบข้อหาการกระทำอันเป็นคอมมิวนิสต์",
+  "date": "",
+  "image_url": "https://pridi.or.th/th/content/2021/10/863",
+  "link_to_scene": "2.2 ลานโพธิ์",
+  "ref": "https://doct6.com/archives/2235"
+ },
+ {
+  "id": "1.4",
+  "element": "ภาพถ่ายเก่า",
+  "title": "",
+  "sub_title": "",
+  "date": "",
+  "image_url": "",
+  "link_to_scene": "",
+  "ref": ""
+ },
+ {
+  "id": "1.5",
+  "element": "หนังสือพิมพ์เก่า (หอสมุดมธ)",
+  "title": "",
+  "sub_title": "",
+  "date": "",
+  "image_url": "",
+  "link_to_scene": "",
+  "ref": ""
+ },
+ {
+  "id": "1.6",
+  "element": "สิ่งเกี่ยวกับลูกเสือชาวบ้าน นวพล",
+  "title": "ลูกเสือชาวบ้านรุ่นแรก 125 คน",
+  "sub_title": "ฝึกรุ่นแรกที่ศูนย์พัฒนาการโรงเรียน ตชด. บ้านเหล่ากอหก จ.เลย โดย พ.ต.อ.สมควร หริกุล แล้วขยายทั่วประเทศ",
+  "date": "",
+  "image_url": "https://commonmuze.com/asset/208",
+  "link_to_scene": "2.6 คำเรียกคนไปลานพระบรมรูปทรงม้า",
+  "ref": ""
+ },
+ {
+  "id": "1.7",
+  "element": "เสียงวิทยุ",
+  "title": "วิทยุยานเกราะและชมรมวิทยุเสรี",
+  "sub_title": "พ.ท.อุทาร สนิทวงศ์ ณ อยุธยา มีบทบาทสำคัญในงานโฆษณาชวนเชื่อ โดยมีเครือข่ายสมาชิกถึง 260 สถานีเป็นเครื่องมือ",
+  "date": "",
+  "image_url": "https://www.youtube.com/watch?v=4Ny-YknmaWg",
+  "link_to_scene": "2.5 แถลงการณ์ชมรมวิทยุเสรี",
+  "ref": ""
+ },
+ {
+  "id": "1.8",
+  "element": "จัดตั้ง กอรมน./ กอ.ปค.",
+  "title": "อธิการบดีเขียนเองว่าใครจัดตั้งใคร",
+  "sub_title": "ป๋วยระบุว่า กอ.รมน. ชักกระทิงแดงให้ปฏิบัติการรุนแรง และมีส่วนจัดตั้งกลุ่มอื่นเช่นนวพล โดยใช้งบประเภทราชการลับ",
+  "date": "",
+  "image_url": "https://pridi.or.th/th/content/2024/10/2168",
+  "link_to_scene": "2.8 สนามฟุตบอล (M79 ลูกแรก), 2.9 หอประชุมใหญ่",
+  "ref": ""
+ },
+ {
+  "id": "1.9",
+  "element": "โปสเตอร์ต่อต้านถนอม",
+  "title": "โปสเตอร์ต่อต้านการกลับมาของสามเณรถนอม กิตติขจร",
+  "sub_title": "จอมพลถนอมจะเดินทางกลับประเทศไทย สร้างกระแสการต่อต้านในกลุ่มนักศึกษา",
+  "date": "",
+  "image_url": "https://thematter.co/social/50-years-6-oct-thongchai-winichakul-interview/264857",
+  "link_to_scene": "2.14 คำประกาศยึดอำนาจ",
+  "ref": ""
+ },
+ {
+  "id": "1.10",
+  "element": "เพลงของขบวนการคอมมิวเนิสต์ (ตัดได้)",
+  "title": "",
+  "sub_title": "",
+  "date": "",
+  "image_url": "",
+  "link_to_scene": "",
+  "ref": ""
+ },
+ {
+  "id": "2.1",
+  "element": "ผ้าขาวม้า + เชือก + เสื้อทหารตัวใหญ่",
+  "title": "กระดาษที่ทำให้คนสองคนถูกฆ่า",
+  "sub_title": "นักศึกษาสองคนแสดงละครล้อการฆ่าแขวนคอที่นครปฐม\n คนหนึ่งเรียนรัฐศาสตร์ปีสอง อีกคนเรียนศิลปศาสตร์ปีสี่ เลือกสองคนนี้เพราะตัวเล็กและน้ำหนักเบา กิ่งไม้จะได้ไม่หัก\n บางกอกโพสต์ลงภาพนี้ในหน้าข่าว",
+  "date": "",
+  "image_url": "",
+  "link_to_scene": "4.2 คดีดำที่ 253ก./2520",
+  "ref": ""
+ },
+ {
+  "id": "2.2",
+  "element": "ลานโพธิ์",
+  "title": "เวทีละคร 4 ตุลา",
+  "sub_title": "4 ตุลาคม เที่ยงวัน ลานโพธิ์ ธรรมศาสตร์ ท่าพระจันทร์\n การแสดงใช้เวลาไม่กี่นาที ใช้ผ้าขาวม้ารัดรอบอก ผูกเชือกไว้ด้านหลัง แล้วสวมเสื้อทหารตัวใหญ่ทับเพื่อบังร่องรอย",
+  "date": "4 ต.ค. 2519 เที่ยง",
+  "image_url": "https://www.facebook.com/LLTD.TU/photos/%E0%B8%9A%E0%B8%97%E0%B8%AA%E0%B8%B1%E0%B8%A1%E0%B8%A0%E0%B8%B2%E0%B8%A9%E0%B8%93%E0%B9%8C-%E0%B8%AD%E0%B8%A0%E0%B8%B4%E0%B8%99%E0%B8%B1%E0%B8%99%E0%B8%97%E0%B9%8C-%E0%B8%9A%E0%B8%B1%E0%B8%A7%E0%B8%AB%E0%B8%A0%E0%B8%B1%E0%B8%81%E0%B8%94%E0%B8%B5-%E0%B8%8A%E0%B8%B2%E0%B8%A2%E0%B8%9C%E0%B8%B9%E0%B9%89%E0%B8%96%E0%B8%B9%E0%B8%81%E0%B8%81%E0%B8%A5%E0%B9%88%E0%B8%B2%E0%B8%A7%E0%B8%AB%E0%B8%B2%E0%B8%A7%E0%B9%88%E0%B8%B2-%E0%B9%81%E0%B8%AA%E0%B8%94%E0%B8%87%E0%B8%A5%E0%B8%B0%E0%B8%84%E0%B8%A3%E0%B8%AB%E0%B8%A1%E0%B8%B4%E0%B9%88%E0%B8%99%E0%B8%9E%E0%B8%A3%E0%B8%B0%E0%B8%9A%E0%B8%A3%E0%B8%A1%E0%B9%80%E0%B8%94%E0%B8%8A%E0%B8%B2%E0%B8%99%E0%B8%B8%E0%B8%A0%E0%B8%B2%E0%B8%9E%E0%B8%84%E0%B8%B1/476400672381913/",
+  "link_to_scene": "4.3 พ.ร.บ.นิรโทษกรรม 2521",
+  "ref": ""
+ },
+ {
+  "id": "2.3",
+  "element": "ดาวสยาม ฉบับบ่าย 4",
+  "title": "ดาวสยาม ฉบับบ่าย 4",
+  "sub_title": "วันรุ่งขึ้น ภาพเดียวกันปรากฏในหนังสือพิมพ์อีกฉบับ\n คราวนี้ไม่ใช่ข่าว แต่เป็นข้อกล่าวหา ว่านักศึกษาหมิ่นพระบรมเดชานุภาพองค์สยามมกุฎราชกุมาร\n รูปไม่ได้เปลี่ยน คำบรรยายใต้รูปเปลี่ยน",
+  "date": "6 ต.ค. 2519",
+  "image_url": "https://doct6.com/wp-content/uploads/2017/09/IMG_3440.jpg",
+  "link_to_scene": "3.1 คำสั่งฉบับที่ 41",
+  "ref": ""
+ },
+ {
+  "id": "2.4",
+  "element": "ใบแจ้งความ สน.ชนะสงคราม",
+  "title": "",
+  "sub_title": "คดีนี้ไม่ได้เริ่มจากตำรวจ\n มีคนอ่านหนังสือพิมพ์ แล้วเดินไปสถานีตำรวจ\n ห้าสิบปีต่อมา คดีมาตรา 112 ส่วนใหญ่ก็ยังเริ่มแบบเดียวกัน",
+  "date": "",
+  "image_url": "",
+  "link_to_scene": "4.2 คดีดำที่ 253ก./2520",
+  "ref": ""
+ },
+ {
+  "id": "2.5",
+  "element": "แถลงการณ์ชมรมวิทยุเสรี",
+  "title": "แถลงการณ์ชมรมวิทยุเสรี",
+  "sub_title": "คืนวันที่ 5 ตุลาคม เวลา 20.35 น. มีการอ่านแถลงการณ์ออกอากาศ\n เป็นครั้งแรกที่ผู้ชุมนุมถูกเรียกว่าผู้ก่อความไม่สงบ\n และเป็นครั้งแรกที่มีคนพูดคำว่า อาจมีการนองเลือด",
+  "date": "5 ต.ค. 2519 20.35 น.",
+  "image_url": "https://doct6.com/archives/category/documents/clip",
+  "link_to_scene": "3.1 คำสั่งฉบับที่ 41",
+  "ref": ""
+ },
+ {
+  "id": "2.6",
+  "element": "คนไปลานพระบรมรูปทรงม้า",
+  "title": "การระดมมวลชนตลอดคืน",
+  "sub_title": "วิทยุออกอากาศตลอดคืน เรียกคนมารวมตัวที่ลานพระบรมรูปทรงม้า\n เที่ยงวันรุ่งขึ้น มีคนมาหลายหมื่น",
+  "date": "คืน 5 ต.ค. - 6 ต.ค. 12.30 น.",
+  "image_url": "https://doct6.com/archives/2235",
+  "link_to_scene": "4.3 พ.ร.บ.นิรโทษกรรม 2521",
+  "ref": "https://doct6.com/learn-about/timeline"
+ },
+ {
+  "id": "2.7",
+  "element": "โปสเตอร์ที่ถูกเผา",
+  "title": "ภาพประตูและความเสียหายในธรรมศาสตร์",
+  "sub_title": "01.40 น. มีคนราวร้อยคนมาเผาโปสเตอร์ที่หน้าประตูด้านสนามหลวง แล้วเสียงปืนนัดแรกก็ดังขึ้น\n ภาพที่เห็นคือสิ่งที่เหลืออยู่หลังจากนั้น",
+  "date": "6 ต.ค. 2519 01.40 น.",
+  "image_url": "https://doct6.com/archives/category/documents/photos/damage-in-thamsasart",
+  "link_to_scene": "4.1 เข้าป่า",
+  "ref": "https://doct6.com/archives/2015"
+ },
+ {
+  "id": "2.8",
+  "element": "สนามฟุตบอล (M79 ลูกแรก)",
+  "title": "M79 ลูกแรก",
+  "sub_title": "05.30 น. ระเบิด M79 ลูกแรกถูกยิงจากนอกมหาวิทยาลัย ตกกลางคนที่นั่งอยู่ในสนามฟุตบอล\n เสียชีวิตทันที 4 คน",
+  "date": "6 ต.ค. 2519 05.30 น.",
+  "image_url": "https://doct6.com/archives/category/documents/photos/before-and-during-the-oct-6",
+  "link_to_scene": "4.1 เข้าป่า",
+  "ref": "https://doct6.com/learn-about/timeline"
+ },
+ {
+  "id": "2.9",
+  "element": "หอประชุมใหญ่",
+  "title": "ทิศทางที่กระสุนเข้ามา",
+  "sub_title": "07.00 น. มีการระดมยิงเข้ามาจากด้านหน้าหอประชุมใหญ่\n จำตึกนี้ไว้ เดี๋ยวจะได้เห็นอีกครั้ง",
+  "date": "6 ต.ค. 2519 07.00 น.",
+  "image_url": "https://ichef.bbci.co.uk/ace/ws/800/cpsprodpb/2722/live/20b295f0-445f-11ed-9ae9-959994b8a64c.jpg.webp",
+  "link_to_scene": "3.1 คำสั่งฉบับที่ 41",
+  "ref": ""
+ },
+ {
+  "id": "2.10",
+  "element": "ต้นมะขาม + เก้าอี้พับ",
+  "title": "ประติมานุสรณ์ 6 ตุลา และงานรำลึก",
+  "sub_title": "ที่สนามหลวงมีต้นมะขามต้นหนึ่ง ภาพที่ถ่ายใต้ต้นไม้ต้นนั้นเป็นที่รู้จักไปทั่วโลก\n แฟ้มนี้ไม่แสดงภาพนั้น แต่แสดงสิ่งที่สร้างขึ้นทีหลังแทน\n ปี 2543 คณะรัฐศาสตร์ จุฬาฯ ติดแผ่นโลหะจารึกชื่อ วิชิตชัย อมรกุล นิสิตปีสอง ไว้หน้าอาคาร 1",
+  "date": "6 ต.ค. 2519 ช่วงเช้า",
+  "image_url": "https://doct6.com/archives/15619/5-%e0%b8%a0%e0%b8%b2%e0%b8%9e%e0%b8%a3%e0%b8%b2%e0%b8%87%e0%b8%a7%e0%b8%b1%e0%b8%a5%e0%b8%9e%e0%b8%b9%e0%b8%a5%e0%b8%b4%e0%b8%95%e0%b9%80%e0%b8%8b%e0%b8%ad%e0%b8%a3%e0%b9%8c-copy",
+  "link_to_scene": "4.3 พ.ร.บ.นิรโทษกรรม 2521",
+  "ref": "https://doct6.com/archives/15619"
+ },
+ {
+  "id": "2.11",
+  "element": "ตชด. บุกสำเร็จ",
+  "title": "",
+  "sub_title": "08.25 น. ตำรวจตระเวนชายแดนเข้าถึงกลางมหาวิทยาลัย\n หน่วยนี้ตั้งขึ้นเมื่อ พ.ศ. 2496 และเป็นหน่วยเดียวกับที่ฝึกลูกเสือชาวบ้านรุ่นแรกในปี 2514",
+  "date": "",
+  "image_url": "",
+  "link_to_scene": "4.1 เข้าป่า",
+  "ref": ""
+ },
+ {
+  "id": "2.12",
+  "element": "บัญชีจับกุม 3,094 คน",
+  "title": "",
+  "sub_title": "วันนั้นมีคนถูกจับ 3,094 คน ชาย 2,432 หญิง 662\n ผู้ที่ก่อความรุนแรง ไม่มีใครถูกจับเลยแม้แต่คนเดียว",
+  "date": "",
+  "image_url": "",
+  "link_to_scene": "4.2 คดีดำที่ 253ก./2520",
+  "ref": ""
+ },
+ {
+  "id": "2.13",
+  "element": "รายงานชันสูตรพลิกศพ",
+  "title": "เอกสารราชการที่กลายเป็นหลักฐานเอาผิดรัฐเอง",
+  "sub_title": "เอกสารชันสูตรของกรมตำรวจระบุผู้เสียชีวิต 46 ราย (เจ้าพนักงาน 5 นักศึกษาประชาชน 41) ขณะที่ตัวเลขทางการวันนั้นแถลง 39 ราย ส่วนโครงการบันทึก 6 ตุลายืนยันรายชื่อที่เสียชีวิตในเหตุการณ์จริง 40 ราย อย่างน้อย 4 รายยังพิสูจน์สาเหตุการเสียชีวิตไม่ได้เพราะเหลือแต่กระดูก",
+  "date": "ต.ค.-ธ.ค. 2519",
+  "image_url": "https://doct6.com/archives/14576",
+  "link_to_scene": "4.3 พ.ร.บ.นิรโทษกรรม 2521",
+  "ref": "https://doct6.com/remember/victims"
+ },
+ {
+  "id": "2.14",
+  "element": "คำประกาศยึดอำนาจ",
+  "title": "คณะปฏิรูปการปกครองแผ่นดิน",
+  "sub_title": "คณะปฏิรูปการปกครองแผ่นดิน นำโดย พล.ร.อ.สงัด ชลออยู่ อ้างว่านิสิตนักศึกษาบางกลุ่มหมิ่นพระบรมเดชานุภาพ โดยมีเจตจำนงทำลายสถาบันฯ ซึ่งเป็นส่วนหนึ่งของแผนคอมมิวนิสต์ที่จะยึดครองประเทศไทย",
+  "date": "6 ต.ค. 2519 18.00 น.",
+  "image_url": "https://www.youtube.com/watch?v=i4TSR-3r7Jw&t=3372s",
+  "link_to_scene": "3.1 คำสั่งฉบับที่ 41",
+  "ref": "https://www.ilaw.or.th/articles/9064"
+ },
+ {
+  "id": "2.15",
+  "element": "คำสั่งฉบับที่ 1 (กฎอัยการศึก + ศาลทหาร)",
+  "title": "คำสั่งแรก ภายใน 70 นาที",
+  "sub_title": "ประกาศกฎอัยการศึกทั่วราชอาณาจักร และให้ความผิดต่อองค์พระมหากษัตริย์ ม.107-112 และความมั่นคง ม.113-129 อยู่ในอำนาจศาลทหารแทนศาลยุติธรรม ตามมาด้วยฉบับ 8 14 22 28 รวม 47 ฉบับใน 15 วัน",
+  "date": "6 ต.ค. 2519 19.10 น.",
+  "image_url": "https://www.ratchakitcha.soc.go.th/DATA/PDF/2519/A/120/19.PDF",
+  "link_to_scene": "4.2 คดีดำที่ 253ก./2520",
+  "ref": ""
+ },
+ {
+  "id": "3.1",
+  "element": "คำสั่งฉบับที่ 41",
+  "title": "คำสั่งฉบับที่ 41",
+  "sub_title": "คำสั่งคณะปฏิรูปการปกครองแผ่นดิน ฉบับที่ 41",
+  "date": "21 ต.ค. 2519 (มีผล 22 ต.ค.)",
+  "image_url": "https://live.staticflickr.com/65535/55410676651_83ed804651_o.jpg?s=eyJpIjo1NTQxMDY3NjY1MSwiZSI6MTc4NDcwNjgzMiwicyI6IjMzNzAyZjBmYTNhYzEzNDY0NDdkNjAyNmM3MTY1ZWFkMGYzZjZjMmYiLCJ2IjoxfQ",
+  "link_to_scene": "",
+  "ref": "https://www.ilaw.or.th/articles/58790"
+ },
+ {
+  "id": "4.1",
+  "element": "เข้าป่า",
+  "title": "เข้าป่า",
+  "sub_title": "หลังจากนั้น มีคนหลายพันคนออกจากเมืองเข้าไปในป่า\n รัฐปราบปรามเพราะกลัวคอมมิวนิสต์ แล้วการปราบปรามก็ทำให้มีคอมมิวนิสต์เพิ่มขึ้น\n การสู้รบยุติในปี 2524 คนกลับเข้าเมืองเกือบหมดในปี 2525",
+  "date": "ปลาย 2519 - 2525",
+  "image_url": "https://doct6.com/archives/13913",
+  "link_to_scene": "",
+  "ref": "https://www.khaosod.co.th/lifestyle/news_2576746"
+ },
+ {
+  "id": "4.2",
+  "element": "คดีดำที่ 253ก./2520",
+  "title": "คดีที่ไม่เคยมีคำพิพากษา",
+  "sub_title": "มีคนถูกฟ้อง 18 คน ด้วย 11 ข้อหาจากการกระทำครั้งเดียว รวมถึงข้อหาดูหมิ่นองค์รัชทายาท\n พิจารณาในศาลทหาร สืบพยานโจทก์กว่า 400 ปาก มีทนายอาสามาช่วย 44 คน\n คดีนี้ไม่เคยมีคำพิพากษา\n และคำสั่งฉบับที่ 41 ก็ใช้กับพวกเขาไม่ได้ เพราะออกมาหลังวันเกิดเหตุ",
+  "date": "ฟ้อง 25 ส.ค. 2520 (doct6 ระบุ 24 ส.ค. ต้องเช็ก)",
+  "image_url": "https://doct6.com/archives/category/documents/the-trial",
+  "link_to_scene": "",
+  "ref": "https://www.ilaw.or.th/articles/9064"
+ },
+ {
+  "id": "4.3",
+  "element": "พ.ร.บ.นิรโทษกรรม 2521",
+  "title": "นิรโทษกรรมที่ไม่สะสาง",
+  "sub_title": "15 กันยายน 2521 สภานิติบัญญัติผ่านกฎหมายนิรโทษกรรมสามวาระรวดในคืนเดียว วันรุ่งขึ้นทั้ง 18 คนได้รับการปล่อยตัว\n กฎหมายให้เหตุผลว่าเกิดจากความเยาว์วัยและการขาดประสบการณ์ของผู้กระทำผิด\n ข้อหาดูหมิ่นองค์รัชทายาทก็ได้รับการนิรโทษด้วย\n ไม่มีเอกสารฉบับใดระบุว่าใครเป็นผู้ก่อความรุนแรง",
+  "date": "15-16 ก.ย. 2521",
+  "image_url": "https://doct6.com/archives/category/documents/amnesty/amnesty-students",
+  "link_to_scene": "",
+  "ref": "https://doct6.com/archives/category/documents/amnesty/amnesty-coup"
+ },
+ {
+  "id": "5.1",
+  "element": "โสภณ สุรฤทธิ์ธำรง",
+  "title": "โสภณ สุรฤทธิ์ธำรง",
+  "sub_title": "คดี ม.112 รวม 4 คดี ได้แก่ กรณีปราศรัยในกิจกรรม #ทัวร์มูล่าผัว ศาลลงโทษจำคุก 3 ปี, คดีปราศรัยในกิจกรรมใครฆ่าพระเจ้าตาก ศาลลงโทษจำคุก 3 ปี, คดีปราศรัยในวันแรงงานสากล ศาลลงโทษจำคุก 2 ปี, คดีอ่านแถลงการณ์ใน APEC2022 ศาลลงโทษจำคุก 2 ปี รวมโทษสี่คดี จำคุก 10 ปี",
+  "date": "",
+  "image_url": "",
+  "link_to_scene": "",
+  "ref": ""
+ },
+ {
+  "id": "5.2",
+  "element": "อานนท์ นำภา",
+  "title": "อานนท์ นำภา",
+  "sub_title": "ขังระหว่างอุทธรณ์ คดี ม.112 จำนวน 10 คดี ที่ศาลชั้นต้นมีคำพิพากษา และโทษในคดีต่างๆ ที่ยังไม่สิ้นสุดรวมกัน 28 ปี 45 เดือน 20 วัน หรือประมาณ 31 ปี 9 เดือนเศษ",
+  "date": "",
+  "image_url": "",
+  "link_to_scene": "",
+  "ref": ""
+ },
+ {
+  "id": "5.3",
+  "element": "ผู้ถูกดำเนินคดีจากการโพสต์ออนไลน์",
+  "title": "[MOCK] ตัวอย่างคดีจากการโพสต์",
+  "sub_title": "ข้อมูลตัวอย่างสำหรับต้นแบบ — กรอกจาก Google Sheet (แถว id 5.3)",
+  "date": "2563–2569",
+  "image_url": "",
+  "link_to_scene": "",
+  "ref": ""
+ },
+ {
+  "id": "5.4",
+  "element": "ผู้ถูกดำเนินคดีจากการปราศรัย",
+  "title": "[MOCK] ตัวอย่างคดีจากการปราศรัย",
+  "sub_title": "ข้อมูลตัวอย่างสำหรับต้นแบบ — กรอกจาก Google Sheet (แถว id 5.4)",
+  "date": "2563–2569",
+  "image_url": "",
+  "link_to_scene": "",
+  "ref": ""
+ },
+ {
+  "id": "5.5",
+  "element": "เยาวชนที่ถูกดำเนินคดี",
+  "title": "[MOCK] ตัวอย่างคดีเยาวชน",
+  "sub_title": "ข้อมูลตัวอย่างสำหรับต้นแบบ — กรอกจาก Google Sheet (แถว id 5.5)",
+  "date": "2563–2569",
+  "image_url": "",
+  "link_to_scene": "",
+  "ref": ""
+ },
+ {
+  "id": "5.6",
+  "element": "ผู้ถูกคุมขังระหว่างพิจารณา",
+  "title": "[MOCK] ตัวอย่างการไม่ให้ประกัน",
+  "sub_title": "ข้อมูลตัวอย่างสำหรับต้นแบบ — กรอกจาก Google Sheet (แถว id 5.6)",
+  "date": "2563–2569",
+  "image_url": "",
+  "link_to_scene": "",
+  "ref": ""
+ },
+ {
+  "id": "5.7",
+  "element": "แฟ้มคดี ม.112",
+  "title": "[MOCK] แฟ้มคดี #7",
+  "sub_title": "ข้อมูลตัวอย่าง — เติมจาก Google Sheet",
+  "date": "",
+  "image_url": "",
+  "link_to_scene": "",
+  "ref": ""
+ },
+ {
+  "id": "5.8",
+  "element": "แฟ้มคดี ม.112",
+  "title": "[MOCK] แฟ้มคดี #8",
+  "sub_title": "ข้อมูลตัวอย่าง — เติมจาก Google Sheet",
+  "date": "",
+  "image_url": "",
+  "link_to_scene": "",
+  "ref": ""
+ },
+ {
+  "id": "5.9",
+  "element": "แฟ้มคดี ม.112",
+  "title": "[MOCK] แฟ้มคดี #9",
+  "sub_title": "ข้อมูลตัวอย่าง — เติมจาก Google Sheet",
+  "date": "",
+  "image_url": "",
+  "link_to_scene": "",
+  "ref": ""
+ },
+ {
+  "id": "5.10",
+  "element": "แฟ้มคดี ม.112",
+  "title": "[MOCK] แฟ้มคดี #10",
+  "sub_title": "ข้อมูลตัวอย่าง — เติมจาก Google Sheet",
+  "date": "",
+  "image_url": "",
+  "link_to_scene": "",
+  "ref": ""
+ },
+ {
+  "id": "5.11",
+  "element": "แฟ้มคดี ม.112",
+  "title": "[MOCK] แฟ้มคดี #11",
+  "sub_title": "ข้อมูลตัวอย่าง — เติมจาก Google Sheet",
+  "date": "",
+  "image_url": "",
+  "link_to_scene": "",
+  "ref": ""
+ },
+ {
+  "id": "5.12",
+  "element": "แฟ้มคดี ม.112",
+  "title": "[MOCK] แฟ้มคดี #12",
+  "sub_title": "ข้อมูลตัวอย่าง — เติมจาก Google Sheet",
+  "date": "",
+  "image_url": "",
+  "link_to_scene": "",
+  "ref": ""
+ },
+ {
+  "id": "5.13",
+  "element": "แฟ้มคดี ม.112",
+  "title": "[MOCK] แฟ้มคดี #13",
+  "sub_title": "ข้อมูลตัวอย่าง — เติมจาก Google Sheet",
+  "date": "",
+  "image_url": "",
+  "link_to_scene": "",
+  "ref": ""
+ },
+ {
+  "id": "5.14",
+  "element": "แฟ้มคดี ม.112",
+  "title": "[MOCK] แฟ้มคดี #14",
+  "sub_title": "ข้อมูลตัวอย่าง — เติมจาก Google Sheet",
+  "date": "",
+  "image_url": "",
+  "link_to_scene": "",
+  "ref": ""
+ },
+ {
+  "id": "5.15",
+  "element": "แฟ้มคดี ม.112",
+  "title": "[MOCK] แฟ้มคดี #15",
+  "sub_title": "ข้อมูลตัวอย่าง — เติมจาก Google Sheet",
+  "date": "",
+  "image_url": "",
+  "link_to_scene": "",
+  "ref": ""
+ }
+];
+
+// ดึงข้อมูลสดจาก Google Sheet (File > Share > Publish to web > CSV) — ใช้เมื่อ deploy จริง
+window.loadFromGoogleSheet = async function(csvUrl, signal){
+  const text = await (await fetch(csvUrl,{cache:'no-store',signal})).text();
+  const rows=[]; let row=[], field='', q=false;
+  for (let i=0;i<text.length;i++){
+    const c=text[i];
+    if (q){ if (c==='"'){ if (text[i+1]==='"'){ field+='"'; i++; } else q=false; } else field+=c; }
+    else if (c==='"') q=true;
+    else if (c===','){ row.push(field); field=''; }
+    else if (c==='\n'||c==='\r'){ if (c==='\r'&&text[i+1]==='\n') i++; row.push(field); rows.push(row); row=[]; field=''; }
+    else field+=c;
+  }
+  if (field||row.length){ row.push(field); rows.push(row); }
+  const head=rows[0].map(h=>h.replace(/^﻿/,'').trim());
+  return rows.slice(1).filter(r=>r[0]&&r[0].trim()).map(r=>Object.fromEntries(head.map((h,i)=>[h,(r[i]||'').trim()])));
+};
+</script>
+
+<script type="text/babel" data-presets="react">
+const { useState, useMemo, useEffect, useLayoutEffect, useRef } = React;
+
+/* ---------- helpers ---------- */
+const CAMPAIGN_URL = 'https://decoup6octsins.com';
+const HASHTAG = '#ลบมรดก6ตุลา';
+// Google Sheet (File > Share > Publish to web > CSV) — เกมจะดึงข้อมูลนี้ทุกครั้งที่เปิด และรีเฟรชทุก 60 วินาที
+const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQRkhZUU7qK5y-8owFnjdjTOrVaeFTLhUWut70zTx9z0Y9rZB7pwvLRDsWLnJxvqZW6TbCO6qAWorZL/pub?output=csv';
+// ตัวนับผู้เล่น: ใส่ URL ของ Google Apps Script web app (ดูวิธีตั้งค่าในคู่มือ) — เว้นว่าง = โหมดตัวอย่างในเครื่อง
+const COUNTER_URL = '';
+// แหล่งข้อมูลหลักที่แสดงในฉากจบเสมอ (แก้ได้)
+const SOURCES = [
+  { name:'โครงการบันทึก 6 ตุลา (doct6.com)', url:'https://doct6.com' },
+  { name:'iLaw', url:'https://www.ilaw.or.th' },
+  { name:'ศูนย์ทนายความเพื่อสิทธิมนุษยชน (TLHR)', url:'https://tlhr2014.com' },
+  { name:'แคมเปญลบมรดก 6 ตุลา', url:CAMPAIGN_URL },
+];
+const mediaKind = u => { u=(u||'').split('?')[0].toLowerCase(); if(!u) return 'none';
+  if(/\.(jpe?g|png|webp|gif|avif)$/.test(u)) return 'image'; if(/\.(mp3|m4a|ogg|wav|aac)$/.test(u)) return 'audio';
+  if(/\.(mp4|webm|mov)$/.test(u)) return 'video'; if(/youtube\.com|youtu\.be/.test(u)) return 'youtube'; return 'page'; };
+const youtubeId = u => { const m=(u||'').match(/(?:v=|youtu\.be\/|embed\/)([\w-]{6,})/); return m?m[1]:null; };
+const sceneOf = f => parseInt(String(f.id).split('.')[0],10);
+const minorOf = f => parseInt(String(f.id).split('.')[1]||'0',10);
+const sortIds = list => [...list].sort((a,b)=>minorOf(a)-minorOf(b));
+const byScene = (list,n) => sortIds(list.filter(f=>sceneOf(f)===n));
+const parseLinks = s => (s||'').split(',').map(x=>x.trim().match(/^(\d+\.\d+)/)).filter(Boolean).map(m=>m[1]);
+const hash = s => { let h=0; for (const c of String(s)) h=(h*31+c.charCodeAt(0))|0; return h>>>0; };
+const tilt = id => ((hash(id)%7)-3)*0.6;
+const isMock = f => /^\[MOCK\]/.test(f.title||'');
+const looksLikeImage = u => /\.(jpe?g|png|webp|gif)(\?|$)/i.test(u||'');
+const SCENE_NAME = {0:'ปูพื้น',1:'ก่อนวันก่อการ',2:'วันก่อการ',3:'คำสั่งฉบับที่ 41',4:'ปลายทางคดี',5:'ผลพวงถึงปัจจุบัน'};
+
+/* กติกาการปรากฏ: Scene n จะโชว์เฉพาะชิ้นที่ link_to_scene ของชิ้นที่เลือกไว้ก่อนหน้า "ไปถึง"
+   ถ้าชีตไม่มีลิงก์ไปถึงชิ้นใดเลย (เช่น 3.1 -> 5.x ยังว่าง) จะโชว์ทั้ง Scene เป็น fallback */
+function reachable(all, fromIds, sceneN){
+  const targets = new Set(fromIds.flatMap(id => { const f=all.find(x=>x.id===id); return parseLinks(f&&f.link_to_scene); }));
+  const hit = byScene(all, sceneN).filter(f => targets.has(f.id));
+  return { list: hit.length ? hit : byScene(all, sceneN), fallback: hit.length===0 };
+}
+
+const KIND_LABEL = { doc:'เอกสาร', file:'แฟ้มคดี', news:'หนังสือพิมพ์', tape:'เทปเสียง', film:'ม้วนฟิล์ม', photo:'ภาพถ่าย' };
+function guessKind(f){
+  if (f.kind && KIND_LABEL[f.kind]) return f.kind;
+  const e = (f.element||'') + ' ' + (f.title||'');
+  if (sceneOf(f)===5) return 'file';
+  if (/เสียง|วิทยุ|เพลง|เทป/.test(e)) return 'tape';
+  if (/youtube\.com|youtu\.be/.test(f.image_url||'') || /คลิป|ฟิล์ม|วิดีโอ/.test(e)) return 'film';
+  if (/หนังสือพิมพ์|ดาวสยาม|โพสต์/.test(e)) return 'news';
+  if (/ภาพ|โปสเตอร์|แผนที่|พิธี|ไซง่อน|ลานโพธิ์|สนาม|หอประชุม|ต้นมะขาม|ลานพระบรมรูป/.test(e)) return 'photo';
+  return 'doc';
+}
+
+/* Scene 2 -> 3 หรือ 4: นับ link_to_scene ของชิ้นที่เลือก (ไม่แสดงให้ผู้เล่นเห็น) */
+function resolveScene2(selectedIds, all){
+  const tally = {};
+  selectedIds.forEach(id => { const f=all.find(x=>x.id===id); parseLinks(f&&f.link_to_scene).forEach(t=>{ tally[t]=(tally[t]||0)+1; }); });
+  const a = tally['3.1']||0;
+  const top = Object.entries(tally).filter(([k])=>k.startsWith('4.')).sort((x,y)=>y[1]-x[1])[0];
+  if (top && top[1] > a) return { next:4, verdict:top[0] };
+  return { next:3, verdict:'3.1' };
+}
+
+/* ---------- SVG threads (final board only): bottom of source -> pin of target ---------- */
+function Threads({ containerRef, links, dep }){
+  const [paths,setPaths]=useState([]);
+  useLayoutEffect(()=>{
+    const measure=()=>{
+      const c=containerRef.current; if(!c) return; const cr=c.getBoundingClientRect();
+      const box=id=>{ const el=c.querySelector(`[data-frag="${CSS.escape(id)}"]`); if(!el) return null; const r=el.getBoundingClientRect(); return {cx:r.left-cr.left+r.width/2+c.scrollLeft, top:r.top-cr.top+c.scrollTop, bottom:r.bottom-cr.top+c.scrollTop}; };
+      setPaths(links.map(l=>{ const a=box(l.from), b=box(l.to); if(!a||!b) return null;
+        const x1=a.cx, y1=a.bottom-6, x2=b.cx, y2=b.top-4; const dy=Math.max(30,(y2-y1)*0.5);
+        return { d:`M${x1},${y1} C${x1},${y1+dy} ${x2},${y2-dy} ${x2},${y2}`, cls:l.cls||'thread' }; }).filter(Boolean));
+    };
+    measure(); const raf=requestAnimationFrame(measure); const t=setTimeout(measure,450);
+    const ro=('ResizeObserver' in window)&&containerRef.current?new ResizeObserver(measure):null; ro&&ro.observe(containerRef.current);
+    window.addEventListener('resize',measure); document.fonts&&document.fonts.ready.then(measure);
+    return ()=>{ window.removeEventListener('resize',measure); cancelAnimationFrame(raf); clearTimeout(t); ro&&ro.disconnect(); };
+  },[JSON.stringify(links),dep]);
+  return <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{zIndex:1}} aria-hidden="true">{paths.map((p,i)=><path key={i} d={p.d} className={p.cls}/>)}</svg>;
+}
+
+/* ---------- card ---------- */
+function Card({ f, selected, dim, onClick, action, actionLabel, compact, style, className='' }){
+  const kind = guessKind(f);
+  return (
+    <div data-frag={f.id} className={`card k-${kind} ${selected?'selected':''} ${dim?'dim':''} ${className}`} style={{transform:`rotate(${tilt(f.id)}deg)`, ...style}}>
+      <div className={`pin ${dim?'grey':''}`}/>
+      {kind==='news' && <div className="strip">หนังสือพิมพ์</div>}
+      {kind==='tape' && <div className="strip"><span className="reel"/><span className="reel"/></div>}
+      {kind==='photo' && <div className="strip overflow-hidden">{looksLikeImage(f.image_url)&&<img src={f.image_url} alt="" className="w-full h-full object-cover" style={{filter:'grayscale(.4) contrast(1.1)'}} onError={e=>{e.currentTarget.style.display='none';}}/>}</div>}
+      {kind!=='news' && kind!=='tape' && kind!=='photo' && <div className="strip"/>}
+      <div className="body" onClick={onClick} role={onClick?'button':undefined} tabIndex={onClick?0:undefined} onKeyDown={e=>{ if(onClick&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); onClick(); } }}>
+        <div className="flex items-center gap-2 text-[10px] tracking-widest text-mute"><span>#{f.id}</span><span>·</span><span>{KIND_LABEL[kind]}</span>{isMock(f)&&<span className="text-red">MOCK</span>}</div>
+        <div className={`ttl ${compact?'text-[13px]':''}`}>{f.title||f.element}</div>
+        {!compact && <div className="sub">{f.date || f.element}</div>}
+        {kind==='news' && !compact && <div className="cols"/>}
+        {action && <button onClick={e=>{e.stopPropagation(); action();}} className={`mt-3 text-[12px] font-semibold px-2.5 py-1 border ${selected?'bg-red border-red text-cream':'border-ink'}`}>{actionLabel}</button>}
+      </div>
+      {kind==='film' && <div className="strip2"/>}
+      {!action && <span className="dot"/>}
+    </div>
+  );
+}
+
+/* ---------- detail ---------- */
+function Detail({ f }){
+  const [fail,setFail]=useState(false);
+  useEffect(()=>setFail(false),[f&&f.id]);
+  if (!f) return null;
+  const url=f.image_url;
+  return (
+    <div className="fade-in">
+      <div className="text-[11px] tracking-widest text-mute">SCENE {sceneOf(f)} · #{f.id} · {KIND_LABEL[guessKind(f)]}</div>
+      <h3 className="text-xl font-semibold leading-snug mt-1" style={{textWrap:'balance'}}>{f.title||f.element}</h3>
+      {f.date && <div className="text-sm text-gold mt-1">{f.date}</div>}
+      <Media url={url} title={f.title||f.element} element={f.element} fail={fail} setFail={setFail}/>
+      <p className="mt-3 text-[14px] leading-relaxed whitespace-pre-line text-cream/90">{f.sub_title || 'ยังไม่มีคำอธิบาย — เติม sub_title ในชีต'}</p>
+      {f.ref && <a href={f.ref} target="_blank" rel="noopener" className="block mt-2 text-xs underline text-mute">อ้างอิงเพิ่มเติม ↗</a>}
+    </div>
+  );
+}
+function Media({ url, title, element, fail, setFail }){
+  const k=mediaKind(url);
+  const box='mt-3 bg-board border border-line relative overflow-hidden';
+  if (k==='image' && !fail) return <div className={box+' aspect-[4/3]'}><img src={url} alt={title} className="w-full h-full object-cover" onError={()=>setFail(true)} style={{filter:/\.gif/i.test(url)?'none':'grayscale(.3) contrast(1.1)'}}/></div>;
+  if (k==='audio') return <div className={box+' p-4'}><div className="text-[11px] tracking-widest text-mute mb-2">เทปเสียง</div><audio controls preload="none" src={url} className="w-full"/></div>;
+  if (k==='video') return <div className={box+' aspect-video'}><video controls preload="metadata" src={url} className="w-full h-full"/></div>;
+  if (k==='youtube' && youtubeId(url)) return <div className={box+' aspect-video'}><iframe src={`https://www.youtube-nocookie.com/embed/${youtubeId(url)}`} title={title} className="w-full h-full" allow="encrypted-media; picture-in-picture" allowFullScreen/></div>;
+  return (
+    <div className={box+' aspect-[4/3]'}>
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 text-mute text-xs">
+        <div>{element}</div>
+        {url && <a href={url} target="_blank" rel="noopener" className="mt-2 underline text-red">เปิดแหล่งอ้างอิง ↗</a>}
+        {!url && <div className="mt-1">ยังไม่มีสื่อ — เติม image_url ในชีต</div>}
+      </div>
+    </div>);
+}
+function Sheet({ title, onClose, children, wide }){
+  useEffect(()=>{ const k=e=>e.key==='Escape'&&onClose(); window.addEventListener('keydown',k); return ()=>window.removeEventListener('keydown',k); },[]);
+  return (
+    <div className="fixed inset-0 z-50 modal-backdrop flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={onClose} role="dialog" aria-modal="true">
+      <div className={`bg-room border border-line w-full ${wide?'sm:max-w-lg':'sm:max-w-md'} max-h-[92vh] scroll-y pop-in`} onClick={e=>e.stopPropagation()}>
+        <div className="flex justify-between items-center px-4 py-2 border-b border-line sticky top-0 bg-room z-10">
+          <span className="text-xs text-mute">{title}</span>
+          <button onClick={onClose} className="text-sm text-cream/80" aria-label="ปิด">ปิด ✕</button>
+        </div>
+        <div className="p-4">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- shell ---------- */
+function SceneHeader({ n, kicker, title, note }){
+  return (
+    <header className="pb-4 fade-in">
+      <div className="text-[11px] tracking-[.25em] text-red">SCENE {n} / 6 · {kicker}</div>
+      <h2 className="text-2xl md:text-3xl font-semibold leading-tight mt-1" style={{textWrap:'balance'}}>{title}</h2>
+      {note && <p className="text-sm text-cream/60 mt-1.5 max-w-prose leading-relaxed">{note}</p>}
+    </header>
+  );
+}
+function ActionBar({ children }){
+  return (
+    <div className="fixed left-0 right-0 bottom-0 z-40 bg-room/95 border-t border-line" style={{paddingBottom:'env(safe-area-inset-bottom,0px)'}}>
+      <div className="max-w-6xl mx-auto px-4 py-2.5 flex items-center gap-3">{children}</div>
+    </div>
+  );
+}
+
+/* ---------- Scene 0 ---------- */
+function Scene0({ frags, picked, setPicked, onOpen, onNext }){
+  const [gate,setGate]=useState(true);
+  if (gate) return (
+    <div className="max-w-md mx-auto px-4 py-12 fade-in">
+      <div className="text-[11px] tracking-[.3em] text-red">FRAGMENT OF OCTOBER</div>
+      <h1 className="text-3xl md:text-4xl font-semibold leading-tight mt-2" style={{textWrap:'balance'}}>รื้อคดี 6 ตุลา</h1>
+      <div className="text-lg text-cream/70 mt-1">ความทรงจำเลือนรางที่มิเคยจางหาย</div>
+      <div className="mt-8 border-l-2 border-red pl-4">
+        <div className="text-[11px] tracking-widest text-mute">CONTENT NOTE</div>
+        <p className="text-sm mt-1 leading-relaxed text-cream/80">เกมนี้ประกอบด้วยเอกสารและภาพเกี่ยวกับความรุนแรงทางการเมือง 6 ตุลาคม 2519 ไม่มีการแสดงภาพความรุนแรงโดยตรง แต่เนื้อหาอาจกระทบความรู้สึก</p>
+      </div>
+      <p className="text-sm mt-5 leading-relaxed text-cream/80">คุณคือผู้รื้อแฟ้ม หลักฐานที่เลือกในแต่ละฉากจะเปิดทางไปสู่หลักฐานชุดถัดไป — สิ่งที่ไม่ได้เลือก จะไม่ปรากฏ</p>
+      <button onClick={()=>setGate(false)} className="btn btn-red w-full mt-8 py-3 text-base">เปิดแฟ้ม</button>
+    </div>
+  );
+  return (
+    <div className="max-w-6xl mx-auto px-4 pt-6 pb-28">
+      <SceneHeader n={0} kicker="ปูพื้น" title="โลกก่อนวันก่อการ" note="เลือก 1 ชิ้นที่คุณคิดว่าเป็นจุดเริ่มของเรื่องนี้"/>
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-4">
+        {frags.map(f=><Card key={f.id} f={f} selected={picked===f.id} onClick={()=>onOpen(f)} action={()=>setPicked(picked===f.id?null:f.id)} actionLabel={picked===f.id?'เลือกแล้ว ✓':'เลือกชิ้นนี้'}/>)}
+      </div>
+      <ActionBar>
+        <span className="text-xs text-mute">{picked?`เลือก #${picked}`:'แตะการ์ดเพื่ออ่าน · กดปุ่มเพื่อเลือก'}</span>
+        <button disabled={!picked} onClick={onNext} className="btn btn-red ml-auto">เริ่มสืบ →</button>
+      </ActionBar>
+    </div>
+  );
+}
+
+/* ---------- Scene 1 & 2 (no threads, no link hints) ---------- */
+function PickScene({ n, kicker, title, note, frags, fallback, selected, setSelected, onOpen, onConfirm }){
+  const toggle=f=>setSelected(s=>s.includes(f.id)?s.filter(x=>x!==f.id):(s.length>=6?s:[...s,f.id]));
+  return (
+    <div className="max-w-6xl mx-auto px-4 pt-6 pb-28">
+      <SceneHeader n={n} kicker={kicker} title={title} note={note}/>
+      <div className="text-xs text-mute -mt-2 mb-3">หลักฐานที่เปิดออกมาจากสิ่งที่คุณเลือกก่อนหน้า: {frags.length} ชิ้น{fallback&&' (ชีตยังไม่ระบุการเชื่อมโยง จึงแสดงทั้งหมด)'}</div>
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5">
+        {frags.map(f=><Card key={f.id} f={f} selected={selected.includes(f.id)} onClick={()=>onOpen(f)} action={()=>toggle(f)} actionLabel={selected.includes(f.id)?'เก็บแล้ว ✓':'เก็บหลักฐาน'}/>)}
+      </div>
+      <ActionBar>
+        <div className="text-xs text-mute">เก็บแล้ว <b className="text-cream text-base">{selected.length}</b>/6 · อย่างน้อย 1 ชิ้น</div>
+        <button disabled={selected.length<1} onClick={onConfirm} className="btn btn-red ml-auto">ยืนยันหลักฐาน →</button>
+      </ActionBar>
+    </div>
+  );
+}
+
+/* ---------- Scene 3 / 4 ---------- */
+function SingleScene({ n, kicker, title, note, f, onOpen, onNext, nextLabel, aside }){
+  return (
+    <div className="max-w-6xl mx-auto px-4 pt-6 pb-28">
+      <SceneHeader n={n} kicker={kicker} title={title} note={note}/>
+      <div className="grid md:grid-cols-[280px_1fr] gap-8 mt-6 items-start">
+        <div className="max-w-xs"><Card f={f} onClick={()=>onOpen(f)}/></div>
+        <div className="border-l border-line pl-5 text-sm text-cream/80 leading-relaxed">{aside}</div>
+      </div>
+      <ActionBar><button onClick={onNext} className="btn btn-red ml-auto">{nextLabel}</button></ActionBar>
+    </div>
+  );
+}
+
+/* ---------- Scene 5: scatter -> focus (no threads) ---------- */
+function Scene5({ frags, fallback, onOpen, onNext, readIds, markRead }){
+  const [phase,setPhase]=useState('chaos');
+  const boxRef=useRef(null); const [size,setSize]=useState({w:360,h:520});
+  useLayoutEffect(()=>{ const m=()=>{ const b=boxRef.current; if(b) setSize({w:b.clientWidth,h:b.clientHeight}); }; m(); window.addEventListener('resize',m); return ()=>window.removeEventListener('resize',m); },[]);
+  useEffect(()=>{ const t=setTimeout(()=>setPhase('focus'),2400); return ()=>clearTimeout(t); },[]);
+  const scatter=useMemo(()=>frags.map(f=>{ const h=hash(f.id); return { x:0.04+(h%1000)/1000*0.72, y:0.03+((h*7>>>0)%1000)/1000*0.8, r:((h%13)-6)*2 }; }),[frags]);
+  const focus=frags.slice(0,6).map(f=>f.id);
+  const cols=size.w>=640?3:2; const cardW=Math.min(200,(size.w-16*(cols+1))/cols); const rowH=cardW*0.62+44;
+  return (
+    <div className="max-w-6xl mx-auto px-4 pt-6 pb-28">
+      <SceneHeader n={5} kicker="หลังคำสั่งฉบับที่ 41" title={phase==='chaos'?'คดีที่ตามมา':'หกเคสของผู้ได้รับผลกระทบ'} note={phase==='chaos'?'กำลังกรองแฟ้มทั้งหมด…':'แตะเปิดอ่านได้ทุกเคส'}/>
+      {phase==='chaos'&&<button onClick={()=>setPhase('focus')} className="text-xs underline text-mute">ข้าม</button>}
+      <div ref={boxRef} className="board relative mt-3 overflow-hidden" style={{height:phase==='chaos'?'min(70vh,620px)':Math.ceil(Math.min(6,frags.length)/cols)*rowH+24}}>
+        {frags.map((f,i)=>{
+          const inF=focus.includes(f.id), p=scatter[i]; let st;
+          if(phase==='chaos') st={left:p.x*size.w,top:p.y*size.h,width:120,transform:`rotate(${p.r}deg)`,opacity:1};
+          else if(inF){ const c=i%cols,r=Math.floor(i/cols); st={left:16+c*(cardW+16),top:16+r*rowH,width:cardW,transform:'none',opacity:1}; }
+          else st={left:p.x*size.w,top:p.y*size.h,width:120,transform:`rotate(${p.r}deg) scale(.4)`,opacity:0,pointerEvents:'none'};
+          return <div key={f.id} className="chaos-card" style={st}><Card f={f} compact={phase==='chaos'} selected={readIds.includes(f.id)} onClick={phase==='focus'&&inF?()=>{markRead(f.id);onOpen(f);}:undefined}/></div>;
+        })}
+      </div>
+      <ActionBar><span className="text-xs text-mute">อ่านแล้ว {readIds.length}/{Math.min(6,frags.length)} เคส</span><button disabled={phase!=='focus'} onClick={onNext} className="btn btn-red ml-auto">เปิดกระดานหลักฐาน →</button></ActionBar>
+    </div>
+  );
+}
+
+/* ---------- 9:16 share image (1080x1920) ---------- */
+function wrapText(ctx, text, maxW){
+  const words=String(text).split(/(\s+)/); const lines=[]; let cur='';
+  const push=()=>{ if(cur.trim()) lines.push(cur.trim()); cur=''; };
+  for (const w of words){
+    if (ctx.measureText(cur+w).width<=maxW){ cur+=w; continue; }
+    push();
+    if (ctx.measureText(w).width<=maxW){ cur=w; continue; }
+    for (const ch of w){ if (ctx.measureText(cur+ch).width>maxW) push(); cur+=ch; }
+  }
+  push(); return lines;
+}
+function renderShareImage(groups, edges){
+  const W=1080, H=1920, c=document.createElement('canvas'); c.width=W; c.height=H; const ctx=c.getContext('2d');
+  const FONT='"IBM Plex Sans Thai", Sarabun, sans-serif';
+  ctx.fillStyle='#221D19'; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#C4262E'; ctx.font=`600 26px ${FONT}`; ctx.fillText('FRAGMENT OF OCTOBER', 72, 120);
+  ctx.fillStyle='#EFE6D2'; ctx.font=`700 64px ${FONT}`; ctx.fillText('รื้อคดี 6 ตุลา', 72, 200);
+  ctx.fillStyle='#9C9187'; ctx.font=`400 30px ${FONT}`; ctx.fillText('ด้ายแดงของฉัน — หลักฐานที่เลือกพาไปถึงไหน', 72, 250);
+  // layout pass (positions in unscaled space), then squeeze to fit
+  let y=320; const cardW=290, cardH=150, gap=22, perRow=3; const pos={}; const labels=[];
+  groups.forEach(g=>{
+    if (!g.items.length) return;
+    labels.push({y, text:`SCENE ${g.scene} · ${g.label}`}); y+=18;
+    g.items.forEach((f,i)=>{ const col=i%perRow, row=Math.floor(i/perRow); pos[f.id]={x:72+col*(cardW+gap), y:y+row*(cardH+gap)}; });
+    y+= Math.ceil(g.items.length/perRow)*(cardH+gap)+44;
+  });
+  const scale = y>H-260 ? (H-260-320)/(y-320) : 1;
+  const T=v=>320+(v-320)*scale;
+  labels.forEach(l=>{ ctx.fillStyle='#B9964A'; ctx.font=`600 22px ${FONT}`; ctx.fillText(l.text.toUpperCase(), 72, T(l.y)); });
+  // edges
+  ctx.lineWidth=3; ctx.lineCap='round';
+  edges.forEach(e=>{ const a=pos[e.from], b=pos[e.to]; if(!a||!b) return; ctx.strokeStyle=e.cls==='thread-gold'?'#B9964A':'#C4262E';
+    const x1=a.x+cardW/2, y1=T(a.y+cardH*scale), x2=b.x+cardW/2, y2=T(b.y); ctx.beginPath(); ctx.moveTo(x1,y1); ctx.bezierCurveTo(x1,y1+40,x2,y2-40,x2,y2); ctx.stroke(); });
+  // cards
+  groups.forEach(g=>g.items.forEach(f=>{ const p=pos[f.id]; const x=p.x, yy=T(p.y), h=cardH*scale;
+    ctx.fillStyle='rgba(0,0,0,.45)'; ctx.fillRect(x+4,yy+6,cardW,h);
+    ctx.fillStyle='#EFE6D2'; ctx.fillRect(x,yy,cardW,h);
+    ctx.fillStyle=sceneOf(f)===5?'#1A1613':'#C4262E'; ctx.fillRect(x,yy,cardW,7);
+    ctx.fillStyle='#C4262E'; ctx.beginPath(); ctx.arc(x+cardW/2,yy,9,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#6E645A'; ctx.font=`500 18px ${FONT}`; ctx.fillText(`#${f.id} · ${KIND_LABEL[guessKind(f)]}`, x+16, yy+38);
+    ctx.fillStyle='#1A1613'; ctx.font=`600 24px ${FONT}`; const lines=wrapText(ctx,f.title||f.element,cardW-32).slice(0,2);
+    lines.forEach((l,i)=>ctx.fillText(l,x+16,yy+72+i*30));
+    if (f.date && h>135){ ctx.fillStyle='#6E645A'; ctx.font=`400 18px ${FONT}`; ctx.fillText(String(f.date).slice(0,28), x+16, yy+h-16); }
+  }));
+  // footer
+  ctx.fillStyle='#C4262E'; ctx.fillRect(0,H-200,W,200);
+  ctx.fillStyle='#EFE6D2'; ctx.font=`700 40px ${FONT}`; ctx.fillText('ร่วมลงชื่อลบมรดกรัฐประหาร', 72, H-120);
+  ctx.font=`400 28px ${FONT}`; ctx.fillText(`ลบคำสั่งฉบับที่ 41 · ${CAMPAIGN_URL.replace('https://','')} · ${HASHTAG}`, 72, H-70);
+  return c;
+}
+
+/* ---------- Scene 6: evidence board by scene rows (compact, fits the screen) ---------- */
+function usePlayCounter(){
+  const [count,setCount]=useState(null); const [mode,setMode]=useState('');
+  useEffect(()=>{ let dead=false;
+    (async()=>{
+      if (COUNTER_URL){ try{ const r=await fetch(COUNTER_URL+(COUNTER_URL.includes('?')?'&':'?')+'hit=1',{redirect:'follow'}); const j=await r.json(); if(!dead){ setCount(j.count); setMode('live'); } return; }catch(e){} }
+      try{ const n=(parseInt(localStorage.getItem('6oct_plays')||'0',10)||0)+1; localStorage.setItem('6oct_plays',String(n)); if(!dead){ setCount(n); setMode('local'); } }catch(e){ if(!dead) setMode('none'); }
+    })(); return ()=>{ dead=true; }; },[]);
+  return { count, mode };
+}
+function Board({ groups, all, onRestart, sheetStatus }){
+  const items=groups.flatMap(g=>g.items); const ids=new Set(items.map(f=>f.id));
+  const [sel,setSel]=useState(items[items.length-1]||null);
+  const [mobileDetail,setMobileDetail]=useState(false);
+  const [shareImg,setShareImg]=useState(null);
+  const wrapRef=useRef(null); const [vw,setVw]=useState(window.innerWidth); const [w,setW]=useState(900);
+  useLayoutEffect(()=>{ const m=()=>{ setVw(window.innerWidth); wrapRef.current&&setW(wrapRef.current.clientWidth); }; m(); window.addEventListener('resize',m); return ()=>window.removeEventListener('resize',m); },[]);
+  useLayoutEffect(()=>{ wrapRef.current&&setW(wrapRef.current.clientWidth); });
+  const isDesktop=vw>=1024;
+  const { count, mode } = usePlayCounter();
+  const edges=[
+    ...items.flatMap(f=>parseLinks(f.link_to_scene).filter(t=>ids.has(t)&&t!==f.id).map(t=>({from:f.id,to:t,cls:'thread'}))),
+    ...items.filter(f=>sceneOf(f)===4&&ids.has('3.1')).map(f=>({from:f.id,to:'3.1',cls:'thread'})),
+    ...(ids.has('3.1')?items.filter(f=>sceneOf(f)===5).map(f=>({from:'3.1',to:f.id,cls:'thread-gold'})):[]),
+  ];
+  const linkedTo = id => edges.filter(e=>e.to===id).map(e=>e.from);
+  const linkedFrom = id => edges.filter(e=>e.from===id).map(e=>e.to);
+  // layout: แถวละฉาก การ์ดย่อ (ชื่อ 2 บรรทัด) ห่อแถวเมื่อเกิน perRow — ไม่มีการเลื่อนแนวนอน
+  const rows=groups.filter(g=>g.items.length);
+  const maxN=Math.max(1,...rows.map(g=>g.items.length));
+  const perRow=isDesktop?Math.min(6,Math.max(3,maxN)):3, gap=10, gapY=14, labelW=isDesktop?110:0, labelH=isDesktop?0:20, cardH=76;
+  const cardW=Math.max(84,Math.min(168,Math.floor((w-labelW-32-gap*(perRow-1))/perRow)));
+  const pos={}; let y=14; const rowTop={};
+  rows.forEach(g=>{ rowTop[g.scene]=y; g.items.forEach((f,i)=>{ const c=i%perRow, r=Math.floor(i/perRow); pos[f.id]={left:labelW+16+c*(cardW+gap), top:y+labelH+r*(cardH+gapY)}; });
+    y+=labelH+Math.ceil(g.items.length/perRow)*(cardH+gapY)+10; });
+  const H=y+8;
+  const refs=(()=>{ const seen=new Set(); const out=[];
+    items.forEach(f=>{ [f.ref, mediaKind(f.image_url)==='page'?f.image_url:''].filter(Boolean).forEach(u=>{ if(!seen.has(u)){ seen.add(u); out.push({name:(f.title||f.element)+' (#'+f.id+')',url:u}); } }); });
+    return out; })();
+  const pick=f=>{ setSel(f); if(!isDesktop) setMobileDetail(true); };
+  const makeImage=()=>{ const c=renderShareImage(groups,edges); setShareImg(c.toDataURL('image/png')); };
+  const [saveMsg,setSaveMsg]=useState('');
+  const toBlob=async()=>await (await fetch(shareImg)).blob();
+  const saveImage=async()=>{
+    setSaveMsg('');
+    try{ const dl = window.claude && window.claude.use ? await window.claude.use('downloads') : null;
+      if (dl){ await dl.save({filename:'6oct-red-thread.png', data: await toBlob()}); setSaveMsg('บันทึกแล้ว ✓'); return; } }
+    catch(e){ if(e&&e.code==='declined'){ setSaveMsg('ยกเลิกการบันทึก'); return; } }
+    try{ const file=new File([await toBlob()],'6oct-red-thread.png',{type:'image/png'});
+      if (navigator.canShare&&navigator.canShare({files:[file]})){ await navigator.share({files:[file],title:'รื้อคดี 6 ตุลา',text:HASHTAG}); return; } }catch(e){}
+    const a=document.createElement('a'); a.href=shareImg; a.download='6oct-red-thread.png'; document.body.appendChild(a); a.click(); a.remove();
+    setSaveMsg('ถ้าไม่มีไฟล์ขึ้นมา ให้กดค้าง/คลิกขวาที่ภาพเพื่อบันทึก');
+  };
+  const Counter=()=>(
+    <div className="sidebox on">
+      <div className="text-[11px] tracking-widest text-mute">ผู้ร่วมรื้อคดีแล้ว</div>
+      <div className="text-2xl font-semibold leading-tight">{count==null?'—':count.toLocaleString('th-TH')} <span className="text-sm font-normal text-mute">ครั้ง</span></div>
+      {mode==='local' && <div className="text-[11px] text-mute">นับเฉพาะในเครื่องนี้ — ตั้งค่า COUNTER_URL เพื่อนับรวมทุกคน</div>}
+    </div>);
+  const Refs=()=>(
+    <div className="sidebox">
+      <div className="text-[11px] tracking-widest text-mute mb-1">แหล่งข้อมูลอ้างอิง</div>
+      <ul className="text-xs leading-relaxed flex flex-col gap-0.5">
+        {refs.map(r=><li key={r.url}><a href={r.url} target="_blank" rel="noopener" className="underline decoration-mute hover:text-red break-words">{r.name}</a></li>)}
+        {refs.length>0 && <li className="border-t border-line my-1"/>}
+        {SOURCES.map(s=><li key={s.url}><a href={s.url} target="_blank" rel="noopener" className="underline decoration-mute hover:text-red">{s.name}</a></li>)}
+      </ul>
+    </div>);
+  return (
+    <div className="max-w-[1400px] mx-auto px-4 pt-3 pb-6 fade-in">
+      <div className="flex flex-wrap items-center gap-3 md:gap-5 pb-3">
+        <div className="mr-auto"><div className="text-lg font-semibold leading-tight">กระดานหลักฐาน</div><div className="text-xs text-mute">คดี 6 ตุลาคม 2519 · แฟ้มที่ยังไม่ปิด</div></div>
+        <div className="text-right"><div className="text-[11px] text-mute">หลักฐาน / เส้นด้าย</div><div className="text-base font-semibold leading-none">{items.length} <span className="text-mute text-sm">/</span> {edges.length}</div></div>
+        <div className="hidden md:flex text-xs gap-3 text-mute"><span className="flex items-center gap-1.5"><span className="inline-block w-5 h-[3px] bg-red"/>เปิดทางให้กัน</span><span className="flex items-center gap-1.5"><span className="inline-block w-5 h-[2px] bg-gold"/>ผลพวงหลังคำสั่ง 41</span></div>
+        <button onClick={makeImage} className="btn btn-outline">บันทึกภาพ</button>
+      </div>
+
+      <div className="grid gap-4" style={{gridTemplateColumns:isDesktop?'minmax(0,1fr) 300px':'minmax(0,1fr)'}}>
+        <div className="min-w-0">
+          <div ref={wrapRef} className="board relative overflow-hidden">
+            <div className="relative" style={{height:H}}>
+              <Threads containerRef={wrapRef} links={edges} dep={w+':'+vw}/>
+              {rows.map(g=>(
+                <div key={g.scene} className="absolute text-[10px] tracking-widest" style={{left:12,top:rowTop[g.scene]+(isDesktop?6:0),width:isDesktop?labelW-16:w-24}}>
+                  <span className="text-red">SCENE {g.scene}</span><span className="text-cream/60 tracking-normal text-[11px] ml-2 md:ml-0 md:block">{g.label}</span>
+                </div>))}
+              {items.map(f=>(
+                <div key={f.id} className="absolute" style={{left:pos[f.id].left,top:pos[f.id].top,width:cardW,zIndex:sel&&sel.id===f.id?3:2}}>
+                  <Card f={f} selected={sel&&sel.id===f.id} onClick={()=>pick(f)} compact className="mini"/>
+                </div>))}
+            </div>
+          </div>
+          <div className="text-[11px] text-mute mt-2 md:hidden flex gap-3"><span className="flex items-center gap-1.5"><span className="inline-block w-5 h-[3px] bg-red"/>เปิดทางให้กัน</span><span className="flex items-center gap-1.5"><span className="inline-block w-5 h-[2px] bg-gold"/>ผลพวงหลังคำสั่ง 41</span><span className="ml-auto">{sheetStatus}</span></div>
+        </div>
+        <aside className="flex flex-col gap-3">
+          {isDesktop && (
+            <div className="border border-line p-4 scroll-y" style={{maxHeight:'44vh'}}>
+              {sel?<><Detail f={sel}/><ThreadNote f={sel} all={all} to={linkedTo(sel.id)} from={linkedFrom(sel.id)} onPick={setSel}/></>:<div className="text-sm text-mute">แตะการ์ดบนกระดาน</div>}
+            </div>)}
+          <a href={CAMPAIGN_URL} target="_blank" rel="noopener" className="btn btn-red text-center"><div>ร่วมลงชื่อลบมรดกรัฐประหาร</div><div className="text-xs font-normal opacity-80">ลบคำสั่งฉบับที่ 41</div></a>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3"><Counter/><Refs/></div>
+          <div className="flex items-center gap-4 text-xs text-mute"><button onClick={onRestart} className="underline">เล่นใหม่</button>{isDesktop&&<span className="ml-auto">{sheetStatus}</span>}</div>
+        </aside>
+      </div>
+      {!isDesktop && mobileDetail && sel && <Sheet title="แฟ้มหลักฐาน" onClose={()=>setMobileDetail(false)}><Detail f={sel}/><ThreadNote f={sel} all={all} to={linkedTo(sel.id)} from={linkedFrom(sel.id)} onPick={setSel}/></Sheet>}
+      {shareImg && (
+        <Sheet title="ภาพสำหรับแชร์ (1080×1920)" onClose={()=>setShareImg(null)} wide>
+          <img src={shareImg} alt="ด้ายแดงของฉัน" className="w-full border border-line" style={{maxHeight:'60vh',objectFit:'contain'}}/>
+          <div className="flex flex-wrap items-center gap-3 mt-3">
+            <button onClick={saveImage} className="btn btn-red">บันทึกภาพลงเครื่อง</button>
+            <span className="text-xs text-mute">{saveMsg}</span>
+          </div>
+          <p className="text-xs text-mute mt-2">ขนาด 9:16 สำหรับโพสต์สตอรี่ Instagram พร้อม {HASHTAG}</p>
+        </Sheet>)}
+    </div>
+  );
+}
+function ThreadNote({ f, all, to, from, onPick }){
+  const name=id=>{ const x=all.find(y=>y.id===id); return x?(x.title||x.element):id; };
+  if (!to.length && !from.length) return null;
+  return (
+    <div className="mt-4 border-t border-line pt-3 text-xs">
+      <div className="tracking-widest text-mute mb-1">ด้ายแดงของชิ้นนี้</div>
+      {to.length>0 && <div className="text-cream/80">เปิดออกมาจาก: {to.map((id,i)=><button key={id} onClick={()=>onPick(all.find(x=>x.id===id))} className="underline text-cream mr-2">{name(id)}</button>)}</div>}
+      {from.length>0 && <div className="text-cream/80 mt-1">นำไปสู่: {from.map(id=><button key={id} onClick={()=>onPick(all.find(x=>x.id===id))} className="underline text-cream mr-2">{name(id)}</button>)}</div>}
+    </div>
+  );
+}
+
+/* ---------- App / state machine ---------- */
+function normalizeRows(rows){ return rows.filter(r=>r.id&&String(r.id).trim()).map(r=>{ const o={}; for (const k of ['id','element','title','sub_title','date','image_url','link_to_scene','ref','kind']) o[k]=(r[k]||'').trim(); o.image_url=o.image_url.split(/\s+/)[0]; return o; }); }
+function useSheet(){
+  const [all,setAll]=useState(window.FRAGMENTS); const [status,setStatus]=useState('ข้อมูลสำรองในไฟล์');
+  useEffect(()=>{ if(!SHEET_CSV_URL) return; let dead=false;
+    const load=async()=>{ try{ const ctl=new AbortController(); const t=setTimeout(()=>ctl.abort(),8000);
+        const rows=await window.loadFromGoogleSheet(SHEET_CSV_URL,ctl.signal); clearTimeout(t); const norm=normalizeRows(rows);
+        if(!dead&&norm.length){ setAll(norm); setStatus('ข้อมูลจากชีต · '+new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'})); } }
+      catch(e){ if(!dead) setStatus(s=>s.startsWith('ข้อมูลจากชีต')?s:'ใช้ข้อมูลสำรอง (ดึงชีตไม่ได้)'); } };
+    load(); const iv=setInterval(load,60000); return ()=>{ dead=true; clearInterval(iv); }; },[]);
+  return { all, status };
+}
+function App(){
+  const { all, status:sheetStatus } = useSheet();
+  const [scene,setScene]=useState(0);
+  const [pick0,setPick0]=useState(null);
+  const [sel1,setSel1]=useState([]); const [sel2,setSel2]=useState([]);
+  const [verdict,setVerdict]=useState(null); const [read5,setRead5]=useState([]);
+  const [modal,setModal]=useState(null);
+  const f31=all.find(f=>f.id==='3.1');
+  // ชุดหลักฐานที่ "ปรากฏ" ในแต่ละฉาก อ่านจาก link_to_scene ของสิ่งที่เลือกก่อนหน้า
+  const s0=byScene(all,0);
+  const r1=useMemo(()=>reachable(all,pick0?[pick0]:[],1),[pick0,all]);
+  const r2=useMemo(()=>reachable(all,sel1,2),[sel1,all]);
+  const r5=useMemo(()=>reachable(all,['3.1'],5),[all]);
+  const goBranch=()=>{ const v=resolveScene2(sel2,all); setVerdict(v); setScene(v.next); };
+  const f4=verdict&&all.find(f=>f.id===verdict.verdict);
+  const groups=[
+    {scene:0,label:SCENE_NAME[0],items:[pick0].filter(Boolean).map(id=>all.find(f=>f.id===id))},
+    {scene:1,label:SCENE_NAME[1],items:sortIds(sel1).map(id=>all.find(f=>f.id===id))},
+    {scene:2,label:SCENE_NAME[2],items:sortIds(sel2).map(id=>all.find(f=>f.id===id))},
+    {scene:4,label:SCENE_NAME[4],items:f4&&verdict.next===4?[f4]:[]},
+    {scene:3,label:SCENE_NAME[3],items:f31?[f31]:[]},
+    {scene:5,label:SCENE_NAME[5],items:sortIds(read5).map(id=>all.find(f=>f.id===id))},
+  ].map(g=>({...g,items:g.items.filter(Boolean)}));
+  const restart=()=>{ setScene(0); setPick0(null); setSel1([]); setSel2([]); setVerdict(null); setRead5([]); };
+  return (
+    <div className="min-h-full">
+      {scene<6 && (
+        <div className="sticky z-30 bg-room/95 border-b border-line" style={{top:'env(safe-area-inset-top,0px)'}}>
+          <div className="max-w-6xl mx-auto px-4 py-2 flex items-center gap-3">
+            <span className="text-sm font-medium">รื้อคดี 6 ตุลา</span>
+            <span className="text-[10px] text-mute hidden sm:inline">{sheetStatus}</span>
+            <div className="ml-auto flex gap-1" aria-label="ความคืบหน้า">{[0,1,2,3,4,5,6].map(n=><span key={n} className={`w-5 h-1 ${n===scene?'bg-red':n<scene?'bg-cream/50':'bg-line'}`}/>)}</div>
+          </div>
+        </div>)}
+      {scene===0&&<Scene0 frags={s0} picked={pick0} setPicked={setPick0} onOpen={setModal} onNext={()=>setScene(1)}/>}
+      {scene===1&&<PickScene n={1} kicker="หลักฐานก่อนวันก่อการ" title="ก่อน 6 ตุลา: ใครปูทาง?" note="เลือก 1–6 ชิ้น แล้วยืนยันหลักฐาน" frags={r1.list} fallback={r1.fallback} selected={sel1} setSelected={setSel1} onOpen={setModal} onConfirm={()=>setScene(2)}/>}
+      {scene===2&&<PickScene n={2} kicker="หลักฐานวันก่อการ" title="4–6 ตุลาคม 2519" note="เลือก 1–6 ชิ้น — หลักฐานที่คุณเก็บกำหนดว่าคดีจะจบแบบไหน" frags={r2.list} fallback={r2.fallback} selected={sel2} setSelected={setSel2} onOpen={setModal} onConfirm={goBranch}/>}
+      {scene===3&&f31&&<SingleScene n={3} kicker="จุดบรรจบ" title="คำสั่งคณะปฏิรูปการปกครองแผ่นดิน ฉบับที่ 41" note={verdict&&verdict.next===4?'ไม่ว่าคดีจะจบแบบไหน เอกสารฉบับนี้ยังอยู่':'หลักฐานที่คุณเลือกชี้ตรงมาที่เอกสารฉบับนี้'} f={f31} onOpen={setModal} onNext={()=>setScene(5)} nextLabel="ดูผลพวง →"
+        aside={<><div className="text-[11px] tracking-widest text-mute mb-1">บันทึกผู้สืบ</div>ออก 21 ต.ค. 2519 — สองสัปดาห์หลังเหตุการณ์ ไม่ผ่านสภา แก้โทษกฎหมายอาญาหลายมาตรา รวมถึงเพิ่มโทษขั้นต่ำ ม.112 ที่ใช้มาจนถึงปัจจุบัน</>}/>}
+      {scene===4&&f4&&<SingleScene n={4} kicker="ทางแยกของคดี" title={f4.title||f4.element} note="ปลายทางของคดีตามหลักฐานที่คุณเก็บมา" f={f4} onOpen={setModal} onNext={()=>setScene(3)} nextLabel="ไปที่คำสั่งฉบับที่ 41 →"
+        aside={<><div className="text-[11px] tracking-widest text-mute mb-1">สรุปผลคดี</div><p className="whitespace-pre-line">{f4.sub_title}</p></>}/>}
+      {scene===5&&<Scene5 frags={r5.list} fallback={r5.fallback} onOpen={setModal} readIds={read5} markRead={id=>setRead5(r=>r.includes(id)?r:[...r,id])} onNext={()=>setScene(6)}/>}
+      {scene===6&&<Board groups={groups} all={all} onRestart={restart} sheetStatus={sheetStatus}/>}
+      {modal && <Sheet title="แฟ้มหลักฐาน" onClose={()=>setModal(null)}><Detail f={modal}/></Sheet>}
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+
+</body>
+</html>
