@@ -11,52 +11,54 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
 tailwind.config = { theme: { extend: {
-  colors: { cream:'#EFE6D2', ink:'#1A1613', room:'#221D19', board:'#181410', red:'#C4262E', gold:'#B9964A', mute:'#6E645A', line:'#3A322C' },
+  colors: { cream:'#F5F5F5', ink:'#000000', room:'#000000', board:'#0A0A0A', red:'#8B2323', gold:'#B8B8B8', mute:'#5C5C5C', line:'#2E2E2E' },
   fontFamily: { sans:['"IBM Plex Sans Thai"','Sarabun','system-ui','sans-serif'] },
 } } };
 </script>
 <style>
   :root{ color-scheme:dark; }
   html,body{ height:100% }
-  body{ background:#221D19; color:#EFE6D2; font-family:'IBM Plex Sans Thai',Sarabun,system-ui,sans-serif; font-size:15px; -webkit-font-smoothing:antialiased; }
-  .room{ background:#221D19; }
-  .board{ background:#181410; border:1px solid #3A322C; }
-  .tab{ border:1px solid #3A322C; color:#9C9187; padding:6px 14px; font-size:13px; font-weight:500; white-space:nowrap; }
-  .tab.on{ border-color:#C4262E; background:#C4262E; color:#EFE6D2; }
-  .tab.gold{ border-color:#B9964A; color:#B9964A; }
+  body{ background:#000000; color:#F5F5F5; font-family:'IBM Plex Sans Thai',Sarabun,system-ui,sans-serif; font-size:15px; -webkit-font-smoothing:antialiased; }
+  .room{ background:transparent; position:relative; z-index:1; }
+  #bg{ position:fixed; inset:-6%; width:112%; height:112%; z-index:0; background:#000; filter:blur(28px) saturate(1.1); image-rendering:auto; }
+  .veil{ background:rgba(0,0,0,.45); }
+  .board{ background:#0A0A0A; border:1px solid #2E2E2E; }
+  .tab{ border:1px solid #2E2E2E; color:#9A9A9A; padding:6px 14px; font-size:13px; font-weight:500; white-space:nowrap; }
+  .tab.on{ border-color:#8B2323; background:#8B2323; color:#F5F5F5; }
+  .tab.gold{ border-color:#B8B8B8; color:#B8B8B8; }
   .btn{ font-weight:600; font-size:14px; padding:9px 18px; border:1px solid transparent; transition:opacity .15s; }
   .btn:active{ opacity:.8 } .btn:disabled{ opacity:.4; cursor:not-allowed }
-  .btn-red{ background:#C4262E; color:#EFE6D2; }
-  .btn-outline{ border-color:#B9964A; color:#B9964A; background:transparent; }
-  .btn-ghost{ border-color:#3A322C; color:#EFE6D2; background:transparent; }
+  .btn-red{ background:#8B2323; color:#F5F5F5; }
+  .btn-outline{ border-color:#B8B8B8; color:#B8B8B8; background:transparent; }
+  .btn-ghost{ border-color:#2E2E2E; color:#F5F5F5; background:transparent; }
 
   /* ---- evidence cards ---- */
-  .card{ position:relative; background:#EFE6D2; color:#1A1613; box-shadow:0 8px 18px -10px rgba(0,0,0,.9), 0 1px 2px rgba(0,0,0,.4); }
+  .card{ position:relative; background:#F5F5F5; color:#000000; box-shadow:0 8px 18px -10px rgba(0,0,0,.9), 0 1px 2px rgba(0,0,0,.4); }
   .card .pin{ position:absolute; top:-8px; left:50%; width:14px; height:14px; margin-left:-7px; border-radius:50%; z-index:2;
-    background:radial-gradient(circle at 35% 30%, #f06a6a, #C4262E 45%, #6e0d13); box-shadow:0 2px 3px rgba(0,0,0,.6); }
+    background:radial-gradient(circle at 35% 30%, #c95a5a, #8B2323 45%, #4a1010); box-shadow:0 2px 3px rgba(0,0,0,.6); }
   .card .pin.grey{ background:radial-gradient(circle at 35% 30%, #ddd, #8b8580 45%, #4a4541); }
-  .card .strip{ height:6px; background:#C4262E; }
+  .card .strip{ height:6px; background:#8B2323; }
   .card .body{ padding:10px 12px 12px; }
   .card .ttl{ font-weight:600; font-size:15px; line-height:1.3; }
-  .card .sub{ font-size:12px; color:#6E645A; margin-top:3px; line-height:1.35; }
-  .card .dot{ position:absolute; right:12px; bottom:12px; width:12px; height:12px; border-radius:50%; background:#C4262E; }
-  .card.selected{ outline:2px solid #C4262E; outline-offset:2px; }
+  .card .sub{ font-size:12px; color:#5C5C5C; margin-top:3px; line-height:1.35; }
+  .card .dot{ position:absolute; right:12px; bottom:12px; width:12px; height:12px; border-radius:50%; background:#8B2323; }
+  .card.selected{ outline:2px solid #8B2323; outline-offset:2px; }
   .card.dim{ opacity:.35 }
   /* kinds */
-  .card.k-doc .strip{ background:#C4262E; }
-  .card.k-file .strip{ background:#1A1613; }
-  .card.k-news .strip{ height:auto; background:transparent; border-top:3px double #1A1613; margin:8px 12px 0; padding-top:3px; font-size:9px; letter-spacing:.2em; color:#6E645A; text-align:center; }
+  .card.k-doc .strip{ background:#8B2323; }
+  .card.k-file .strip{ background:#000000; }
+  .card.k-news .strip{ height:auto; background:transparent; border-top:3px double #000000; margin:8px 12px 0; padding-top:3px; font-size:9px; letter-spacing:.2em; color:#5C5C5C; text-align:center; }
   .card.k-news .body{ padding-top:6px; }
-  .card.k-news .cols{ height:14px; margin-top:8px; background:repeating-linear-gradient(90deg,#1A1613 0 1px,transparent 1px 33%) , repeating-linear-gradient(0deg,#cfc5b0 0 1px,transparent 1px 4px); opacity:.5; }
-  .card.k-tape .strip{ height:30px; background:#2B2622; display:flex; align-items:center; justify-content:center; gap:36px; }
-  .card.k-tape .reel{ width:16px; height:16px; border-radius:50%; border:3px solid #EFE6D2; box-shadow:0 0 0 2px #2B2622, 0 0 0 3px #6E645A; }
-  .card.k-film .strip, .card.k-film .strip2{ height:10px; background:#1A1613 repeating-linear-gradient(90deg, transparent 0 6px, #EFE6D2 6px 12px, transparent 12px 18px); background-size:18px 5px; background-repeat:repeat-x; background-position:0 2.5px; }
-  .card.k-film .strip{ background-color:#1A1613; }
+  .card.k-news .cols{ height:14px; margin-top:8px; background:repeating-linear-gradient(90deg,#000000 0 1px,transparent 1px 33%) , repeating-linear-gradient(0deg,#c9c9c9 0 1px,transparent 1px 4px); opacity:.5; }
+  .card.k-tape .strip{ height:30px; background:#1A1A1A; display:flex; align-items:center; justify-content:center; gap:36px; }
+  .card.k-tape .reel{ width:16px; height:16px; border-radius:50%; border:3px solid #F5F5F5; box-shadow:0 0 0 2px #1A1A1A, 0 0 0 3px #5C5C5C; }
+  .card.k-film .strip, .card.k-film .strip2{ height:10px; background:#000000 repeating-linear-gradient(90deg, transparent 0 6px, #F5F5F5 6px 12px, transparent 12px 18px); background-size:18px 5px; background-repeat:repeat-x; background-position:0 2.5px; }
+  .card.k-film .strip{ background-color:#000000; }
   .card.k-photo{ padding:8px 8px 0; }
-  .card.k-photo .strip{ height:54px; background:#2B2622 linear-gradient(135deg,#3a332d,#211c18); }
+  .card.k-photo .strip{ height:54px; background:#1A1A1A linear-gradient(135deg,#2a2a2a,#111111); }
   .card.k-photo .body{ padding:8px 4px 12px; }
-  .card.k-locked{ background:#2B2622; color:#9C9187; border:1px solid #B9964A; }
-  .card.k-locked .strip{ background:#B9964A; }
+  .card.k-locked{ background:#1A1A1A; color:#9A9A9A; border:1px solid #B8B8B8; }
+  .card.k-locked .strip{ background:#B8B8B8; }
 
   /* mini cards on the final board */
   .card.mini .body{ padding:6px 8px 8px; }
@@ -66,29 +68,62 @@ tailwind.config = { theme: { extend: {
   .card.mini.k-photo{ padding:4px 4px 0; } .card.mini.k-photo .strip{ height:22px; } .card.mini.k-photo .body{ padding:6px 4px 8px; }
   .card.mini.k-news .strip{ height:auto; margin:4px 8px 0; font-size:8px; } .card.mini.k-film .strip, .card.mini.k-film .strip2{ height:7px; background-size:12px 3px; background-position:0 2px; }
   .card.mini .dot{ width:8px; height:8px; right:8px; bottom:8px; } .card.mini .pin{ width:10px; height:10px; margin-left:-5px; top:-5px; }
-  .thread{ stroke:#C4262E; stroke-width:2.5; fill:none; stroke-linecap:round; }
-  .thread-thin{ stroke:#C4262E; stroke-width:1.2; fill:none; opacity:.7; }
-  .thread-gold{ stroke:#B9964A; stroke-width:1.6; fill:none; opacity:.85; }
+  /* full document (Scene 3) */
+  .docsheet{ background:#F5F5F5; color:#000; padding:28px 28px 32px; box-shadow:0 20px 40px -20px rgba(0,0,0,.9); border-top:8px solid #8B2323; }
+  .docsheet h2{ font-size:22px; font-weight:700; line-height:1.3; }
+  .docsheet p{ font-size:15.5px; line-height:1.8; white-space:pre-line; }
+  .docsheet .meta{ font-size:12px; color:#5C5C5C; letter-spacing:.08em; }
+  @media (min-width:768px){ .docsheet{ padding:40px 48px 48px; } .docsheet h2{ font-size:26px } .docsheet p{ font-size:16.5px } }
+  @keyframes blink{ 50%{opacity:0} }
+  @keyframes riseIn{ from{opacity:0; transform:translateY(14px)} to{opacity:1; transform:none} }
+  @keyframes wipe{ to{ width:140px } }
+  @keyframes sweep{ 0%{ transform:translateX(-40%) scale(.8); opacity:0 } 40%{ opacity:1 } 100%{ transform:translateX(30%) scale(1.2); opacity:0 } }
+  @keyframes transOut{ 0%,75%{ opacity:1 } 100%{ opacity:0; visibility:hidden } }
+  .thread{ stroke:#8B2323; stroke-width:2.5; fill:none; stroke-linecap:round; }
+  .thread-thin{ stroke:#8B2323; stroke-width:1.2; fill:none; opacity:.7; }
+  .thread-gold{ stroke:#B8B8B8; stroke-width:1.6; fill:none; opacity:.85; }
   .fade-in{ animation:fadeIn .4s ease both; }
   @keyframes fadeIn{ from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
   .pop-in{ animation:popIn .3s ease both; }
   @keyframes popIn{ from{opacity:0; transform:scale(.96)} to{opacity:1; transform:scale(1)} }
   .chaos-card{ position:absolute; transition:all 1.3s cubic-bezier(.6,0,.2,1); }
   .modal-backdrop{ background:rgba(10,8,6,.8); }
-  .scroll-x{ overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:thin; scrollbar-color:#C4262E transparent; }
-  .scroll-y{ overflow-y:auto; scrollbar-width:thin; scrollbar-color:#C4262E transparent; }
-  button:focus-visible,a:focus-visible{ outline:2px solid #B9964A; outline-offset:2px; }
-  .sidebox{ border:1px solid #3A322C; padding:10px 12px; }
-  .sidebox.on{ border-left:3px solid #C4262E; }
-  .chip{ display:inline-block; width:6px; height:6px; border-radius:50%; background:#B9964A; margin-right:3px; }
-  .chip.off{ background:#3A322C; }
+  .scroll-x{ overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:thin; scrollbar-color:#8B2323 transparent; }
+  .scroll-y{ overflow-y:auto; scrollbar-width:thin; scrollbar-color:#8B2323 transparent; }
+  button:focus-visible,a:focus-visible{ outline:2px solid #B8B8B8; outline-offset:2px; }
+  .sidebox{ border:1px solid #2E2E2E; padding:10px 12px; }
+  .sidebox.on{ border-left:3px solid #8B2323; }
+  .chip{ display:inline-block; width:6px; height:6px; border-radius:50%; background:#B8B8B8; margin-right:3px; }
+  .chip.off{ background:#2E2E2E; }
   @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
 </style>
 
 </head>
 <body>
+<canvas id="bg" aria-hidden="true"></canvas>
 <div id="root" class="room min-h-full"></div>
 
+<script>
+/* พื้นหลังเคลื่อนไหว: abstract เบลอ ลึกลับ — ดำ ~70% · แดง ~22% · ขาว ~8%
+   วาดก้อนสีนุ่ม ๆ บนแคนวาสเล็กแล้วขยายเต็มจอพร้อมเบลอ */
+(function(){
+  const cv=document.getElementById('bg'); if(!cv) return; const ctx=cv.getContext('2d');
+  const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const SW=160; let SH=90, blobs=[], t=0;
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  function make(color,n,rmin,rmax,alpha){ const out=[]; for(let i=0;i<n;i++) out.push({color,alpha,x:rnd(0,SW),y:rnd(0,SH),r:rnd(rmin,rmax),ax:rnd(6,22),ay:rnd(4,14),px:rnd(0,6.28),py:rnd(0,6.28),sx:rnd(0.05,0.12),sy:rnd(0.04,0.1)}); return out; }
+  function resize(){ SH=Math.round(SW*window.innerHeight/window.innerWidth); cv.width=SW; cv.height=SH;
+    blobs=[...make('139,35,35',5,SW*0.10,SW*0.22,0.7), ...make('245,245,245',3,SW*0.035,SW*0.08,0.4)]; draw(); }
+  function draw(){ ctx.fillStyle='#000'; ctx.fillRect(0,0,SW,SH);
+    for(const b of blobs){ const x=b.x+Math.sin(t*b.sx+b.px)*b.ax, y=b.y+Math.cos(t*b.sy+b.py)*b.ay;
+      const g=ctx.createRadialGradient(x,y,0,x,y,b.r); g.addColorStop(0,`rgba(${b.color},${b.alpha})`); g.addColorStop(0.55,`rgba(${b.color},${b.alpha*0.45})`); g.addColorStop(1,`rgba(${b.color},0)`);
+      ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,b.r,0,6.283); ctx.fill(); }
+    // grain
+    ctx.fillStyle='rgba(0,0,0,.06)'; for(let i=0;i<40;i++) ctx.fillRect(Math.random()*SW,Math.random()*SH,1,1); }
+  function step(){ t+=0.016; draw(); requestAnimationFrame(step); }
+  window.addEventListener('resize',resize); resize(); if(!reduce) requestAnimationFrame(step);
+})();
+</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.24.7/babel.min.js"></script>
@@ -599,8 +634,15 @@ const CAMPAIGN_URL = 'https://decoup6octsins.com';
 const HASHTAG = '#ลบมรดก6ตุลา';
 // Google Sheet (File > Share > Publish to web > CSV) — เกมจะดึงข้อมูลนี้ทุกครั้งที่เปิด และรีเฟรชทุก 60 วินาที
 const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQRkhZUU7qK5y-8owFnjdjTOrVaeFTLhUWut70zTx9z0Y9rZB7pwvLRDsWLnJxvqZW6TbCO6qAWorZL/pub?output=csv';
-// ตัวนับผู้เล่น: ใส่ URL ของ Google Apps Script web app (ดูวิธีตั้งค่าในคู่มือ) — เว้นว่าง = โหมดตัวอย่างในเครื่อง
+// ตัวนับรวมทุกคน (ผู้เล่นถึงหน้าสุดท้าย / ผู้กดร่วมลงชื่อ)
+// ค่าเริ่มต้นใช้บริการฟรี Abacus (abacus.jasoncameron.dev) — เปลี่ยน COUNTER_NS ให้เป็นชื่อเฉพาะของโปรเจกต์คุณ
+// หรือใส่ COUNTER_URL ของ Google Apps Script (รับ ?key=plays|signed&hit=1 ตอบ {count}) เพื่อเก็บตัวเลขในชีตของคุณเอง
+const COUNTER_NS = 'fragment-of-october-6oct';
 const COUNTER_URL = '';
+async function counter(key, hit){
+  if (COUNTER_URL){ const r=await fetch(`${COUNTER_URL}${COUNTER_URL.includes('?')?'&':'?'}key=${key}${hit?'&hit=1':''}`,{redirect:'follow'}); return (await r.json()).count; }
+  const r=await fetch(`https://abacus.jasoncameron.dev/${hit?'hit':'get'}/${COUNTER_NS}/${key}`); return (await r.json()).value;
+}
 // แหล่งข้อมูลหลักที่แสดงในฉากจบเสมอ (แก้ได้)
 const SOURCES = [
   { name:'โครงการบันทึก 6 ตุลา (doct6.com)', url:'https://doct6.com' },
@@ -643,14 +685,13 @@ function guessKind(f){
   return 'doc';
 }
 
-/* Scene 2 -> 3 หรือ 4: นับ link_to_scene ของชิ้นที่เลือก (ไม่แสดงให้ผู้เล่นเห็น) */
+/* Scene 2 -> 3.1 เสมอ -> แล้วจึงถึงปลายทางคดี 4.x ที่ได้เสียงมากสุดจาก link_to_scene ของชิ้นที่เลือก (ไม่แสดงให้ผู้เล่นเห็น) */
 function resolveScene2(selectedIds, all){
   const tally = {};
   selectedIds.forEach(id => { const f=all.find(x=>x.id===id); parseLinks(f&&f.link_to_scene).forEach(t=>{ tally[t]=(tally[t]||0)+1; }); });
-  const a = tally['3.1']||0;
   const top = Object.entries(tally).filter(([k])=>k.startsWith('4.')).sort((x,y)=>y[1]-x[1])[0];
-  if (top && top[1] > a) return { next:4, verdict:top[0] };
-  return { next:3, verdict:'3.1' };
+  const fallback = byScene(all,4)[0];
+  return { verdict: top ? top[0] : (fallback ? fallback.id : null) }; // ปลายทางคดี (แสดงหลังคำสั่ง 41)
 }
 
 /* ---------- SVG threads (final board only): bottom of source -> pin of target ---------- */
@@ -673,7 +714,7 @@ function Threads({ containerRef, links, dep }){
 }
 
 /* ---------- card ---------- */
-function Card({ f, selected, dim, onClick, action, actionLabel, compact, style, className='' }){
+function Card({ f, selected, dim, onClick, action, actionLabel, actionDisabled, compact, style, className='' }){
   const kind = guessKind(f);
   return (
     <div data-frag={f.id} className={`card k-${kind} ${selected?'selected':''} ${dim?'dim':''} ${className}`} style={{transform:`rotate(${tilt(f.id)}deg)`, ...style}}>
@@ -683,11 +724,11 @@ function Card({ f, selected, dim, onClick, action, actionLabel, compact, style, 
       {kind==='photo' && <div className="strip overflow-hidden">{looksLikeImage(f.image_url)&&<img src={f.image_url} alt="" className="w-full h-full object-cover" style={{filter:'grayscale(.4) contrast(1.1)'}} onError={e=>{e.currentTarget.style.display='none';}}/>}</div>}
       {kind!=='news' && kind!=='tape' && kind!=='photo' && <div className="strip"/>}
       <div className="body" onClick={onClick} role={onClick?'button':undefined} tabIndex={onClick?0:undefined} onKeyDown={e=>{ if(onClick&&(e.key==='Enter'||e.key===' ')){ e.preventDefault(); onClick(); } }}>
-        <div className="flex items-center gap-2 text-[10px] tracking-widest text-mute"><span>#{f.id}</span><span>·</span><span>{KIND_LABEL[kind]}</span>{isMock(f)&&<span className="text-red">MOCK</span>}</div>
+        <div className="flex items-center gap-2 text-[10px] tracking-widest text-mute"><span>#{f.id}</span><span>·</span><span className="truncate">{f.element}</span>{isMock(f)&&<span className="text-red">MOCK</span>}</div>
         <div className={`ttl ${compact?'text-[13px]':''}`}>{f.title||f.element}</div>
-        {!compact && <div className="sub">{f.date || f.element}</div>}
+        {!compact && f.date && <div className="sub">{f.date}</div>}
         {kind==='news' && !compact && <div className="cols"/>}
-        {action && <button onClick={e=>{e.stopPropagation(); action();}} className={`mt-3 text-[12px] font-semibold px-2.5 py-1 border ${selected?'bg-red border-red text-cream':'border-ink'}`}>{actionLabel}</button>}
+        {action && <button disabled={actionDisabled} onClick={e=>{e.stopPropagation(); action();}} className={`mt-3 text-[12px] font-semibold px-2.5 py-1 border ${selected?'bg-red border-red text-cream':actionDisabled?'border-mute text-mute opacity-60 cursor-not-allowed':'border-ink'}`}>{actionDisabled?'อ่านก่อนจึงเก็บได้':actionLabel}</button>}
       </div>
       {kind==='film' && <div className="strip2"/>}
       {!action && <span className="dot"/>}
@@ -703,12 +744,11 @@ function Detail({ f }){
   const url=f.image_url;
   return (
     <div className="fade-in">
-      <div className="text-[11px] tracking-widest text-mute">SCENE {sceneOf(f)} · #{f.id} · {KIND_LABEL[guessKind(f)]}</div>
+      <div className="text-[11px] tracking-widest text-mute">SCENE {sceneOf(f)} · #{f.id} · {f.element}</div>
       <h3 className="text-xl font-semibold leading-snug mt-1" style={{textWrap:'balance'}}>{f.title||f.element}</h3>
       {f.date && <div className="text-sm text-gold mt-1">{f.date}</div>}
       <Media url={url} title={f.title||f.element} element={f.element} fail={fail} setFail={setFail}/>
       <p className="mt-3 text-[14px] leading-relaxed whitespace-pre-line text-cream/90">{f.sub_title || 'ยังไม่มีคำอธิบาย — เติม sub_title ในชีต'}</p>
-      {f.ref && <a href={f.ref} target="_blank" rel="noopener" className="block mt-2 text-xs underline text-mute">อ้างอิงเพิ่มเติม ↗</a>}
     </div>
   );
 }
@@ -732,8 +772,8 @@ function Sheet({ title, onClose, children, wide }){
   useEffect(()=>{ const k=e=>e.key==='Escape'&&onClose(); window.addEventListener('keydown',k); return ()=>window.removeEventListener('keydown',k); },[]);
   return (
     <div className="fixed inset-0 z-50 modal-backdrop flex items-end sm:items-center justify-center p-0 sm:p-4" onClick={onClose} role="dialog" aria-modal="true">
-      <div className={`bg-room border border-line w-full ${wide?'sm:max-w-lg':'sm:max-w-md'} max-h-[92vh] scroll-y pop-in`} onClick={e=>e.stopPropagation()}>
-        <div className="flex justify-between items-center px-4 py-2 border-b border-line sticky top-0 bg-room z-10">
+      <div className={`bg-black border border-line w-full ${wide?'sm:max-w-lg':'sm:max-w-md'} max-h-[92vh] scroll-y pop-in`} onClick={e=>e.stopPropagation()}>
+        <div className="flex justify-between items-center px-4 py-2 border-b border-line sticky top-0 bg-black z-10">
           <span className="text-xs text-mute">{title}</span>
           <button onClick={onClose} className="text-sm text-cream/80" aria-label="ปิด">ปิด ✕</button>
         </div>
@@ -755,17 +795,17 @@ function SceneHeader({ n, kicker, title, note }){
 }
 function ActionBar({ children }){
   return (
-    <div className="fixed left-0 right-0 bottom-0 z-40 bg-room/95 border-t border-line" style={{paddingBottom:'env(safe-area-inset-bottom,0px)'}}>
+    <div className="fixed left-0 right-0 bottom-0 z-40 bg-black/85 border-t border-line" style={{paddingBottom:'env(safe-area-inset-bottom,0px)'}}>
       <div className="max-w-6xl mx-auto px-4 py-2.5 flex items-center gap-3">{children}</div>
     </div>
   );
 }
 
 /* ---------- Scene 0 ---------- */
-function Scene0({ frags, picked, setPicked, onOpen, onNext }){
+function Scene0({ frags, picked, setPicked, onOpen, onNext, readIds }){
   const [gate,setGate]=useState(true);
   if (gate) return (
-    <div className="max-w-md mx-auto px-4 py-12 fade-in">
+    <div className="max-w-md mx-auto px-4 py-12 fade-in veil">
       <div className="text-[11px] tracking-[.3em] text-red">FRAGMENT OF OCTOBER</div>
       <h1 className="text-3xl md:text-4xl font-semibold leading-tight mt-2" style={{textWrap:'balance'}}>รื้อคดี 6 ตุลา</h1>
       <div className="text-lg text-cream/70 mt-1">ความทรงจำเลือนรางที่มิเคยจางหาย</div>
@@ -778,13 +818,13 @@ function Scene0({ frags, picked, setPicked, onOpen, onNext }){
     </div>
   );
   return (
-    <div className="max-w-6xl mx-auto px-4 pt-6 pb-28">
+    <div className="max-w-6xl mx-auto px-4 veil pt-6 pb-28">
       <SceneHeader n={0} kicker="ปูพื้น" title="โลกก่อนวันก่อการ" note="เลือก 1 ชิ้นที่คุณคิดว่าเป็นจุดเริ่มของเรื่องนี้"/>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-4">
-        {frags.map(f=><Card key={f.id} f={f} selected={picked===f.id} onClick={()=>onOpen(f)} action={()=>setPicked(picked===f.id?null:f.id)} actionLabel={picked===f.id?'เลือกแล้ว ✓':'เลือกชิ้นนี้'}/>)}
+        {frags.map(f=><Card key={f.id} f={f} selected={picked===f.id} onClick={()=>onOpen(f)} actionDisabled={!readIds.includes(f.id)} action={()=>setPicked(picked===f.id?null:f.id)} actionLabel={picked===f.id?'เลือกแล้ว ✓':'เลือกชิ้นนี้'}/>)}
       </div>
       <ActionBar>
-        <span className="text-xs text-mute">{picked?`เลือก #${picked}`:'แตะการ์ดเพื่ออ่าน · กดปุ่มเพื่อเลือก'}</span>
+        <span className="text-xs text-mute">{picked?`เลือก #${picked}`:'แตะการ์ดเพื่ออ่านก่อน แล้วจึงเลือกได้'}</span>
         <button disabled={!picked} onClick={onNext} className="btn btn-red ml-auto">เริ่มสืบ →</button>
       </ActionBar>
     </div>
@@ -792,14 +832,14 @@ function Scene0({ frags, picked, setPicked, onOpen, onNext }){
 }
 
 /* ---------- Scene 1 & 2 (no threads, no link hints) ---------- */
-function PickScene({ n, kicker, title, note, frags, fallback, selected, setSelected, onOpen, onConfirm }){
+function PickScene({ n, kicker, title, note, frags, fallback, selected, setSelected, onOpen, onConfirm, readIds }){
   const toggle=f=>setSelected(s=>s.includes(f.id)?s.filter(x=>x!==f.id):(s.length>=6?s:[...s,f.id]));
   return (
-    <div className="max-w-6xl mx-auto px-4 pt-6 pb-28">
+    <div className="max-w-6xl mx-auto px-4 veil pt-6 pb-28">
       <SceneHeader n={n} kicker={kicker} title={title} note={note}/>
       <div className="text-xs text-mute -mt-2 mb-3">หลักฐานที่เปิดออกมาจากสิ่งที่คุณเลือกก่อนหน้า: {frags.length} ชิ้น{fallback&&' (ชีตยังไม่ระบุการเชื่อมโยง จึงแสดงทั้งหมด)'}</div>
       <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5">
-        {frags.map(f=><Card key={f.id} f={f} selected={selected.includes(f.id)} onClick={()=>onOpen(f)} action={()=>toggle(f)} actionLabel={selected.includes(f.id)?'เก็บแล้ว ✓':'เก็บหลักฐาน'}/>)}
+        {frags.map(f=><Card key={f.id} f={f} selected={selected.includes(f.id)} onClick={()=>onOpen(f)} actionDisabled={!readIds.includes(f.id)} action={()=>toggle(f)} actionLabel={selected.includes(f.id)?'เก็บแล้ว ✓':'เก็บหลักฐาน'}/>)}
       </div>
       <ActionBar>
         <div className="text-xs text-mute">เก็บแล้ว <b className="text-cream text-base">{selected.length}</b>/6 · อย่างน้อย 1 ชิ้น</div>
@@ -812,13 +852,63 @@ function PickScene({ n, kicker, title, note, frags, fallback, selected, setSelec
 /* ---------- Scene 3 / 4 ---------- */
 function SingleScene({ n, kicker, title, note, f, onOpen, onNext, nextLabel, aside }){
   return (
-    <div className="max-w-6xl mx-auto px-4 pt-6 pb-28">
+    <div className="max-w-6xl mx-auto px-4 veil pt-6 pb-28">
       <SceneHeader n={n} kicker={kicker} title={title} note={note}/>
       <div className="grid md:grid-cols-[280px_1fr] gap-8 mt-6 items-start">
         <div className="max-w-xs"><Card f={f} onClick={()=>onOpen(f)}/></div>
         <div className="border-l border-line pl-5 text-sm text-cream/80 leading-relaxed">{aside}</div>
       </div>
       <ActionBar><button onClick={onNext} className="btn btn-red ml-auto">{nextLabel}</button></ActionBar>
+    </div>
+  );
+}
+
+/* ---------- Scene 3: Order 41 as a full document ---------- */
+function DocScene({ n, kicker, title, note, f, onNext, nextLabel }){
+  const [fail,setFail]=useState(false);
+  return (
+    <div className="max-w-3xl mx-auto px-4 veil pt-6 pb-28">
+      <SceneHeader n={n} kicker={kicker} title={title} note={note}/>
+      <article className="docsheet fade-in">
+        <div className="meta">#{f.id} · {f.element}{f.date?' · '+f.date:''}</div>
+        <h2 className="mt-2" style={{textWrap:'balance'}}>{f.title||f.element}</h2>
+        {['image','audio','video','youtube'].includes(mediaKind(f.image_url)) && <div className="mt-4"><Media url={f.image_url} title={f.title||f.element} element={f.element} fail={fail} setFail={setFail}/></div>}
+        {mediaKind(f.image_url)==='page' && <a href={f.image_url} target="_blank" rel="noopener" className="inline-block mt-3 text-xs underline text-red">เปิดเอกสารต้นฉบับ ↗</a>}
+        <p className="mt-4">{f.sub_title || 'ยังไม่มีเนื้อหา — เติม sub_title ในชีต'}</p>
+      </article>
+      <ActionBar><button onClick={onNext} className="btn btn-red ml-auto">{nextLabel}</button></ActionBar>
+    </div>
+  );
+}
+
+/* ---------- Interlude: ข้อความเต็มจอก่อนเข้าฉากผลพวง ---------- */
+function Interlude({ text, onDone }){
+  const [shown,setShown]=useState(0);
+  useEffect(()=>{ let i=0; const t=setInterval(()=>{ i++; setShown(i); if(i>=text.length) clearInterval(t); },45); return ()=>clearInterval(t); },[text]);
+  const done=shown>=text.length;
+  useEffect(()=>{ if(!done) return; const t=setTimeout(onDone,1500); return ()=>clearTimeout(t); },[done]); // ค้างข้อความไว้ 1.5 วิ แล้วไปต่อเอง
+  return (
+    <div className="fixed inset-0 z-40 bg-black/90 flex flex-col items-center justify-center px-6 text-center fade-in">
+      <div className="text-[11px] tracking-[.35em] text-red mb-6">CASE FILE · CONTINUED</div>
+      <p className="text-xl md:text-3xl font-semibold leading-relaxed max-w-2xl" style={{textWrap:'balance'}}>{text.slice(0,shown)}<span className="inline-block w-[2px] h-[1em] bg-red align-middle ml-1" style={{animation:'blink 1s steps(2) infinite'}}/></p>
+      <button onClick={onDone} className={`btn btn-red mt-10 transition-opacity duration-700 ${done?'opacity-100':'opacity-0 pointer-events-none'}`}>เปิดแฟ้มผลพวง →</button>
+      <button onClick={onDone} className="absolute bottom-6 right-6 text-xs text-mute underline">ข้าม</button>
+    </div>
+  );
+}
+
+/* ---------- Transition: ฉากคั่นแบบแฟ้มสืบสวนก่อนเข้าแต่ละฉาก ---------- */
+function SceneTransition({ n, label, onDone }){
+  useEffect(()=>{ const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches; const t=setTimeout(onDone, reduce?80:1500); return ()=>clearTimeout(t); },[]);
+  return (
+    <div className="fixed inset-0 z-[60] bg-black flex items-center justify-center overflow-hidden" style={{animation:'transOut 1.5s ease forwards'}}>
+      <div className="absolute inset-0" style={{background:'radial-gradient(ellipse 45% 35% at 50% 50%, rgba(139,35,35,.35), transparent 70%)', animation:'sweep 1.5s ease-in-out forwards'}}/>
+      <div className="relative text-center px-6">
+        <div className="text-[11px] tracking-[.45em] text-mute" style={{animation:'riseIn .6s ease both'}}>CASE FILE</div>
+        <div className="text-5xl md:text-7xl font-bold text-cream mt-2" style={{animation:'riseIn .7s .15s ease both', letterSpacing:'.04em'}}>{String(n).padStart(2,'0')}</div>
+        <div className="h-[2px] bg-red mx-auto mt-4" style={{width:0, animation:'wipe .8s .35s ease forwards'}}/>
+        <div className="text-base md:text-lg text-cream/80 mt-3" style={{animation:'riseIn .6s .5s ease both'}}>{label}</div>
+      </div>
     </div>
   );
 }
@@ -833,7 +923,7 @@ function Scene5({ frags, fallback, onOpen, onNext, readIds, markRead }){
   const focus=frags.slice(0,6).map(f=>f.id);
   const cols=size.w>=640?3:2; const cardW=Math.min(200,(size.w-16*(cols+1))/cols); const rowH=cardW*0.62+44;
   return (
-    <div className="max-w-6xl mx-auto px-4 pt-6 pb-28">
+    <div className="max-w-6xl mx-auto px-4 veil pt-6 pb-28">
       <SceneHeader n={5} kicker="หลังคำสั่งฉบับที่ 41" title={phase==='chaos'?'คดีที่ตามมา':'หกเคสของผู้ได้รับผลกระทบ'} note={phase==='chaos'?'กำลังกรองแฟ้มทั้งหมด…':'แตะเปิดอ่านได้ทุกเคส'}/>
       {phase==='chaos'&&<button onClick={()=>setPhase('focus')} className="text-xs underline text-mute">ข้าม</button>}
       <div ref={boxRef} className="board relative mt-3 overflow-hidden" style={{height:phase==='chaos'?'min(70vh,620px)':Math.ceil(Math.min(6,frags.length)/cols)*rowH+24}}>
@@ -865,10 +955,10 @@ function wrapText(ctx, text, maxW){
 function renderShareImage(groups, edges){
   const W=1080, H=1920, c=document.createElement('canvas'); c.width=W; c.height=H; const ctx=c.getContext('2d');
   const FONT='"IBM Plex Sans Thai", Sarabun, sans-serif';
-  ctx.fillStyle='#221D19'; ctx.fillRect(0,0,W,H);
-  ctx.fillStyle='#C4262E'; ctx.font=`600 26px ${FONT}`; ctx.fillText('FRAGMENT OF OCTOBER', 72, 120);
-  ctx.fillStyle='#EFE6D2'; ctx.font=`700 64px ${FONT}`; ctx.fillText('รื้อคดี 6 ตุลา', 72, 200);
-  ctx.fillStyle='#9C9187'; ctx.font=`400 30px ${FONT}`; ctx.fillText('ด้ายแดงของฉัน — หลักฐานที่เลือกพาไปถึงไหน', 72, 250);
+  ctx.fillStyle='#000000'; ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#8B2323'; ctx.font=`600 26px ${FONT}`; ctx.fillText('FRAGMENT OF OCTOBER', 72, 120);
+  ctx.fillStyle='#F5F5F5'; ctx.font=`700 64px ${FONT}`; ctx.fillText('รื้อคดี 6 ตุลา', 72, 200);
+  ctx.fillStyle='#9A9A9A'; ctx.font=`400 30px ${FONT}`; ctx.fillText('ด้ายแดงของฉัน — หลักฐานที่เลือกพาไปถึงไหน', 72, 250);
   // layout pass (positions in unscaled space), then squeeze to fit
   let y=320; const cardW=290, cardH=150, gap=22, perRow=3; const pos={}; const labels=[];
   groups.forEach(g=>{
@@ -879,38 +969,41 @@ function renderShareImage(groups, edges){
   });
   const scale = y>H-260 ? (H-260-320)/(y-320) : 1;
   const T=v=>320+(v-320)*scale;
-  labels.forEach(l=>{ ctx.fillStyle='#B9964A'; ctx.font=`600 22px ${FONT}`; ctx.fillText(l.text.toUpperCase(), 72, T(l.y)); });
+  labels.forEach(l=>{ ctx.fillStyle='#B8B8B8'; ctx.font=`600 22px ${FONT}`; ctx.fillText(l.text.toUpperCase(), 72, T(l.y)); });
   // edges
   ctx.lineWidth=3; ctx.lineCap='round';
-  edges.forEach(e=>{ const a=pos[e.from], b=pos[e.to]; if(!a||!b) return; ctx.strokeStyle=e.cls==='thread-gold'?'#B9964A':'#C4262E';
+  edges.forEach(e=>{ const a=pos[e.from], b=pos[e.to]; if(!a||!b) return; ctx.strokeStyle=e.cls==='thread-gold'?'#B8B8B8':'#8B2323';
     const x1=a.x+cardW/2, y1=T(a.y+cardH*scale), x2=b.x+cardW/2, y2=T(b.y); ctx.beginPath(); ctx.moveTo(x1,y1); ctx.bezierCurveTo(x1,y1+40,x2,y2-40,x2,y2); ctx.stroke(); });
   // cards
   groups.forEach(g=>g.items.forEach(f=>{ const p=pos[f.id]; const x=p.x, yy=T(p.y), h=cardH*scale;
     ctx.fillStyle='rgba(0,0,0,.45)'; ctx.fillRect(x+4,yy+6,cardW,h);
-    ctx.fillStyle='#EFE6D2'; ctx.fillRect(x,yy,cardW,h);
-    ctx.fillStyle=sceneOf(f)===5?'#1A1613':'#C4262E'; ctx.fillRect(x,yy,cardW,7);
-    ctx.fillStyle='#C4262E'; ctx.beginPath(); ctx.arc(x+cardW/2,yy,9,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#6E645A'; ctx.font=`500 18px ${FONT}`; ctx.fillText(`#${f.id} · ${KIND_LABEL[guessKind(f)]}`, x+16, yy+38);
-    ctx.fillStyle='#1A1613'; ctx.font=`600 24px ${FONT}`; const lines=wrapText(ctx,f.title||f.element,cardW-32).slice(0,2);
+    ctx.fillStyle='#F5F5F5'; ctx.fillRect(x,yy,cardW,h);
+    ctx.fillStyle=sceneOf(f)===5?'#000000':'#8B2323'; ctx.fillRect(x,yy,cardW,7);
+    ctx.fillStyle='#8B2323'; ctx.beginPath(); ctx.arc(x+cardW/2,yy,9,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#5C5C5C'; ctx.font=`500 18px ${FONT}`; ctx.fillText(wrapText(ctx,`#${f.id} · ${f.element}`,cardW-32)[0]||'', x+16, yy+38);
+    ctx.fillStyle='#000000'; ctx.font=`600 24px ${FONT}`; const lines=wrapText(ctx,f.title||f.element,cardW-32).slice(0,2);
     lines.forEach((l,i)=>ctx.fillText(l,x+16,yy+72+i*30));
-    if (f.date && h>135){ ctx.fillStyle='#6E645A'; ctx.font=`400 18px ${FONT}`; ctx.fillText(String(f.date).slice(0,28), x+16, yy+h-16); }
+    if (f.date && h>135){ ctx.fillStyle='#5C5C5C'; ctx.font=`400 18px ${FONT}`; ctx.fillText(String(f.date).slice(0,28), x+16, yy+h-16); }
   }));
   // footer
-  ctx.fillStyle='#C4262E'; ctx.fillRect(0,H-200,W,200);
-  ctx.fillStyle='#EFE6D2'; ctx.font=`700 40px ${FONT}`; ctx.fillText('ร่วมลงชื่อลบมรดกรัฐประหาร', 72, H-120);
+  ctx.fillStyle='#8B2323'; ctx.fillRect(0,H-200,W,200);
+  ctx.fillStyle='#F5F5F5'; ctx.font=`700 40px ${FONT}`; ctx.fillText('ร่วมลงชื่อลบมรดกรัฐประหาร', 72, H-120);
   ctx.font=`400 28px ${FONT}`; ctx.fillText(`ลบคำสั่งฉบับที่ 41 · ${CAMPAIGN_URL.replace('https://','')} · ${HASHTAG}`, 72, H-70);
   return c;
 }
 
 /* ---------- Scene 6: evidence board by scene rows (compact, fits the screen) ---------- */
-function usePlayCounter(){
-  const [count,setCount]=useState(null); const [mode,setMode]=useState('');
+function useCounters(){
+  const [plays,setPlays]=useState(null); const [signed,setSigned]=useState(null); const [mode,setMode]=useState('');
   useEffect(()=>{ let dead=false;
     (async()=>{
-      if (COUNTER_URL){ try{ const r=await fetch(COUNTER_URL+(COUNTER_URL.includes('?')?'&':'?')+'hit=1',{redirect:'follow'}); const j=await r.json(); if(!dead){ setCount(j.count); setMode('live'); } return; }catch(e){} }
-      try{ const n=(parseInt(localStorage.getItem('6oct_plays')||'0',10)||0)+1; localStorage.setItem('6oct_plays',String(n)); if(!dead){ setCount(n); setMode('local'); } }catch(e){ if(!dead) setMode('none'); }
+      try{ const [a,b]=await Promise.all([counter('plays',true), counter('signed',false)]); if(!dead){ setPlays(a); setSigned(b); setMode('live'); } return; }catch(e){}
+      try{ const n=(parseInt(localStorage.getItem('6oct_plays')||'0',10)||0)+1; localStorage.setItem('6oct_plays',String(n)); const s=parseInt(localStorage.getItem('6oct_signed')||'0',10)||0; if(!dead){ setPlays(n); setSigned(s); setMode('local'); } }catch(e){ if(!dead) setMode('none'); }
     })(); return ()=>{ dead=true; }; },[]);
-  return { count, mode };
+  const sign=async()=>{ try{ if(sessionStorage.getItem('6oct_signed_once')) return; sessionStorage.setItem('6oct_signed_once','1'); }catch(e){}
+    try{ const v=await counter('signed',true); setSigned(v); return; }catch(e){}
+    try{ const s=(parseInt(localStorage.getItem('6oct_signed')||'0',10)||0)+1; localStorage.setItem('6oct_signed',String(s)); setSigned(s); }catch(e){} };
+  return { plays, signed, mode, sign };
 }
 function Board({ groups, all, onRestart, sheetStatus }){
   const items=groups.flatMap(g=>g.items); const ids=new Set(items.map(f=>f.id));
@@ -921,11 +1014,13 @@ function Board({ groups, all, onRestart, sheetStatus }){
   useLayoutEffect(()=>{ const m=()=>{ setVw(window.innerWidth); wrapRef.current&&setW(wrapRef.current.clientWidth); }; m(); window.addEventListener('resize',m); return ()=>window.removeEventListener('resize',m); },[]);
   useLayoutEffect(()=>{ wrapRef.current&&setW(wrapRef.current.clientWidth); });
   const isDesktop=vw>=1024;
-  const { count, mode } = usePlayCounter();
+  const { plays, signed, mode, sign } = useCounters();
+  const f4=items.find(f=>sceneOf(f)===4); const hub=f4?f4.id:(ids.has('3.1')?'3.1':null);
   const edges=[
-    ...items.flatMap(f=>parseLinks(f.link_to_scene).filter(t=>ids.has(t)&&t!==f.id).map(t=>({from:f.id,to:t,cls:'thread'}))),
-    ...items.filter(f=>sceneOf(f)===4&&ids.has('3.1')).map(f=>({from:f.id,to:'3.1',cls:'thread'})),
-    ...(ids.has('3.1')?items.filter(f=>sceneOf(f)===5).map(f=>({from:'3.1',to:f.id,cls:'thread-gold'})):[]),
+    ...items.flatMap(f=>parseLinks(f.link_to_scene).filter(t=>ids.has(t)&&t!==f.id&&sceneOf({id:t})!==4).map(t=>({from:f.id,to:t,cls:'thread'}))),
+    ...(ids.has('3.1')?items.filter(f=>sceneOf(f)===2&&!parseLinks(f.link_to_scene).includes('3.1')).map(f=>({from:f.id,to:'3.1',cls:'thread'})):[]),
+    ...(f4&&ids.has('3.1')?[{from:'3.1',to:f4.id,cls:'thread'}]:[]),
+    ...(hub?items.filter(f=>sceneOf(f)===5).map(f=>({from:hub,to:f.id,cls:'thread-gold'})):[]),
   ];
   const linkedTo = id => edges.filter(e=>e.to===id).map(e=>e.from);
   const linkedFrom = id => edges.filter(e=>e.from===id).map(e=>e.to);
@@ -956,10 +1051,12 @@ function Board({ groups, all, onRestart, sheetStatus }){
     setSaveMsg('ถ้าไม่มีไฟล์ขึ้นมา ให้กดค้าง/คลิกขวาที่ภาพเพื่อบันทึก');
   };
   const Counter=()=>(
-    <div className="sidebox on">
-      <div className="text-[11px] tracking-widest text-mute">ผู้ร่วมรื้อคดีแล้ว</div>
-      <div className="text-2xl font-semibold leading-tight">{count==null?'—':count.toLocaleString('th-TH')} <span className="text-sm font-normal text-mute">ครั้ง</span></div>
-      {mode==='local' && <div className="text-[11px] text-mute">นับเฉพาะในเครื่องนี้ — ตั้งค่า COUNTER_URL เพื่อนับรวมทุกคน</div>}
+    <div className="sidebox on grid grid-cols-2 gap-3">
+      <div><div className="text-[11px] tracking-widest text-mute">ผู้ร่วมรื้อคดีแล้ว</div>
+        <div className="text-2xl font-semibold leading-tight">{plays==null?'—':plays.toLocaleString('th-TH')} <span className="text-sm font-normal text-mute">คน</span></div></div>
+      <div><div className="text-[11px] tracking-widest text-mute">กดร่วมลงชื่อแล้ว</div>
+        <div className="text-2xl font-semibold leading-tight">{signed==null?'—':signed.toLocaleString('th-TH')} <span className="text-sm font-normal text-mute">คน</span></div></div>
+      {mode==='local' && <div className="col-span-2 text-[11px] text-mute">ตอนนี้นับได้เฉพาะในเครื่องนี้ (ติดต่อบริการนับไม่ได้) — บนเว็บจริงจะนับรวมทุกคน</div>}
     </div>);
   const Refs=()=>(
     <div className="sidebox">
@@ -971,7 +1068,7 @@ function Board({ groups, all, onRestart, sheetStatus }){
       </ul>
     </div>);
   return (
-    <div className="max-w-[1400px] mx-auto px-4 pt-3 pb-6 fade-in">
+    <div className="max-w-[1400px] mx-auto px-4 veil pt-3 pb-6 fade-in">
       <div className="flex flex-wrap items-center gap-3 md:gap-5 pb-3">
         <div className="mr-auto"><div className="text-lg font-semibold leading-tight">กระดานหลักฐาน</div><div className="text-xs text-mute">คดี 6 ตุลาคม 2519 · แฟ้มที่ยังไม่ปิด</div></div>
         <div className="text-right"><div className="text-[11px] text-mute">หลักฐาน / เส้นด้าย</div><div className="text-base font-semibold leading-none">{items.length} <span className="text-mute text-sm">/</span> {edges.length}</div></div>
@@ -1001,7 +1098,7 @@ function Board({ groups, all, onRestart, sheetStatus }){
             <div className="border border-line p-4 scroll-y" style={{maxHeight:'44vh'}}>
               {sel?<><Detail f={sel}/><ThreadNote f={sel} all={all} to={linkedTo(sel.id)} from={linkedFrom(sel.id)} onPick={setSel}/></>:<div className="text-sm text-mute">แตะการ์ดบนกระดาน</div>}
             </div>)}
-          <a href={CAMPAIGN_URL} target="_blank" rel="noopener" className="btn btn-red text-center"><div>ร่วมลงชื่อลบมรดกรัฐประหาร</div><div className="text-xs font-normal opacity-80">ลบคำสั่งฉบับที่ 41</div></a>
+          <a href={CAMPAIGN_URL} target="_blank" rel="noopener" onClick={sign} className="btn btn-red text-center"><div>ร่วมลงชื่อลบมรดกรัฐประหาร</div><div className="text-xs font-normal opacity-80">ลบคำสั่งฉบับที่ 41</div></a>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-3"><Counter/><Refs/></div>
           <div className="flex items-center gap-4 text-xs text-mute"><button onClick={onRestart} className="underline">เล่นใหม่</button>{isDesktop&&<span className="ml-auto">{sheetStatus}</span>}</div>
         </aside>
@@ -1045,45 +1142,49 @@ function useSheet(){
 }
 function App(){
   const { all, status:sheetStatus } = useSheet();
-  const [scene,setScene]=useState(0);
+  const [scene,setSceneRaw]=useState(0);
+  const [trans,setTrans]=useState(null);
+  const setScene=n=>{ const label={0:'โลกก่อนวันก่อการ',1:'ก่อนวันก่อการ',2:'วันก่อการ',3:'คำสั่งฉบับที่ 41',4:'ปลายทางของคดี',5:'ผลพวงถึงปัจจุบัน',6:'กระดานหลักฐาน'}[n]; if(label!==undefined&&n!==0){ setTrans({n:Math.floor(n),label}); } setSceneRaw(n); window.scrollTo(0,0); };
   const [pick0,setPick0]=useState(null);
   const [sel1,setSel1]=useState([]); const [sel2,setSel2]=useState([]);
   const [verdict,setVerdict]=useState(null); const [read5,setRead5]=useState([]);
   const [modal,setModal]=useState(null);
+  const [readIds,setReadIds]=useState([]);
+  const openFrag=f=>{ setModal(f); setReadIds(r=>r.includes(f.id)?r:[...r,f.id]); };
   const f31=all.find(f=>f.id==='3.1');
   // ชุดหลักฐานที่ "ปรากฏ" ในแต่ละฉาก อ่านจาก link_to_scene ของสิ่งที่เลือกก่อนหน้า
   const s0=byScene(all,0);
   const r1=useMemo(()=>reachable(all,pick0?[pick0]:[],1),[pick0,all]);
   const r2=useMemo(()=>reachable(all,sel1,2),[sel1,all]);
   const r5=useMemo(()=>reachable(all,['3.1'],5),[all]);
-  const goBranch=()=>{ const v=resolveScene2(sel2,all); setVerdict(v); setScene(v.next); };
+  const goBranch=()=>{ setVerdict(resolveScene2(sel2,all)); setScene(3); };
   const f4=verdict&&all.find(f=>f.id===verdict.verdict);
   const groups=[
     {scene:0,label:SCENE_NAME[0],items:[pick0].filter(Boolean).map(id=>all.find(f=>f.id===id))},
     {scene:1,label:SCENE_NAME[1],items:sortIds(sel1).map(id=>all.find(f=>f.id===id))},
     {scene:2,label:SCENE_NAME[2],items:sortIds(sel2).map(id=>all.find(f=>f.id===id))},
-    {scene:4,label:SCENE_NAME[4],items:f4&&verdict.next===4?[f4]:[]},
     {scene:3,label:SCENE_NAME[3],items:f31?[f31]:[]},
+    {scene:4,label:SCENE_NAME[4],items:f4?[f4]:[]},
     {scene:5,label:SCENE_NAME[5],items:sortIds(read5).map(id=>all.find(f=>f.id===id))},
   ].map(g=>({...g,items:g.items.filter(Boolean)}));
-  const restart=()=>{ setScene(0); setPick0(null); setSel1([]); setSel2([]); setVerdict(null); setRead5([]); };
+  const restart=()=>{ setSceneRaw(0); setPick0(null); setSel1([]); setSel2([]); setVerdict(null); setRead5([]); setReadIds([]); };
   return (
     <div className="min-h-full">
+      {trans && <SceneTransition key={trans.n+trans.label} n={trans.n} label={trans.label} onDone={()=>setTrans(null)}/>}
       {scene<6 && (
-        <div className="sticky z-30 bg-room/95 border-b border-line" style={{top:'env(safe-area-inset-top,0px)'}}>
+        <div className="sticky z-30 bg-black/85 border-b border-line" style={{top:'env(safe-area-inset-top,0px)'}}>
           <div className="max-w-6xl mx-auto px-4 py-2 flex items-center gap-3">
             <span className="text-sm font-medium">รื้อคดี 6 ตุลา</span>
             <span className="text-[10px] text-mute hidden sm:inline">{sheetStatus}</span>
             <div className="ml-auto flex gap-1" aria-label="ความคืบหน้า">{[0,1,2,3,4,5,6].map(n=><span key={n} className={`w-5 h-1 ${n===scene?'bg-red':n<scene?'bg-cream/50':'bg-line'}`}/>)}</div>
           </div>
         </div>)}
-      {scene===0&&<Scene0 frags={s0} picked={pick0} setPicked={setPick0} onOpen={setModal} onNext={()=>setScene(1)}/>}
-      {scene===1&&<PickScene n={1} kicker="หลักฐานก่อนวันก่อการ" title="ก่อน 6 ตุลา: ใครปูทาง?" note="เลือก 1–6 ชิ้น แล้วยืนยันหลักฐาน" frags={r1.list} fallback={r1.fallback} selected={sel1} setSelected={setSel1} onOpen={setModal} onConfirm={()=>setScene(2)}/>}
-      {scene===2&&<PickScene n={2} kicker="หลักฐานวันก่อการ" title="4–6 ตุลาคม 2519" note="เลือก 1–6 ชิ้น — หลักฐานที่คุณเก็บกำหนดว่าคดีจะจบแบบไหน" frags={r2.list} fallback={r2.fallback} selected={sel2} setSelected={setSel2} onOpen={setModal} onConfirm={goBranch}/>}
-      {scene===3&&f31&&<SingleScene n={3} kicker="จุดบรรจบ" title="คำสั่งคณะปฏิรูปการปกครองแผ่นดิน ฉบับที่ 41" note={verdict&&verdict.next===4?'ไม่ว่าคดีจะจบแบบไหน เอกสารฉบับนี้ยังอยู่':'หลักฐานที่คุณเลือกชี้ตรงมาที่เอกสารฉบับนี้'} f={f31} onOpen={setModal} onNext={()=>setScene(5)} nextLabel="ดูผลพวง →"
-        aside={<><div className="text-[11px] tracking-widest text-mute mb-1">บันทึกผู้สืบ</div>ออก 21 ต.ค. 2519 — สองสัปดาห์หลังเหตุการณ์ ไม่ผ่านสภา แก้โทษกฎหมายอาญาหลายมาตรา รวมถึงเพิ่มโทษขั้นต่ำ ม.112 ที่ใช้มาจนถึงปัจจุบัน</>}/>}
-      {scene===4&&f4&&<SingleScene n={4} kicker="ทางแยกของคดี" title={f4.title||f4.element} note="ปลายทางของคดีตามหลักฐานที่คุณเก็บมา" f={f4} onOpen={setModal} onNext={()=>setScene(3)} nextLabel="ไปที่คำสั่งฉบับที่ 41 →"
-        aside={<><div className="text-[11px] tracking-widest text-mute mb-1">สรุปผลคดี</div><p className="whitespace-pre-line">{f4.sub_title}</p></>}/>}
+      {scene===0&&<Scene0 frags={s0} picked={pick0} setPicked={setPick0} onOpen={openFrag} readIds={readIds} onNext={()=>setScene(1)}/>}
+      {scene===1&&<PickScene n={1} kicker="หลักฐานก่อนวันก่อการ" title="ก่อน 6 ตุลา: ใครปูทาง?" note="แตะอ่านแต่ละชิ้นก่อน แล้วเก็บ 1–6 ชิ้น" frags={r1.list} fallback={r1.fallback} selected={sel1} setSelected={setSel1} onOpen={openFrag} readIds={readIds} onConfirm={()=>setScene(2)}/>}
+      {scene===2&&<PickScene n={2} kicker="หลักฐานวันก่อการ" title="4–6 ตุลาคม 2519" note="แตะอ่านแต่ละชิ้นก่อน แล้วเก็บ 1–6 ชิ้น — สิ่งที่เก็บกำหนดปลายทางของคดี" frags={r2.list} fallback={r2.fallback} selected={sel2} setSelected={setSel2} onOpen={openFrag} readIds={readIds} onConfirm={goBranch}/>}
+      {scene===3&&f31&&<DocScene n={3} kicker="จุดบรรจบ" title="ทุกเส้นทางมาถึงเอกสารฉบับนี้" note="อ่านให้จบก่อนไปต่อ" f={f31} onNext={()=>setScene(f4?4:4.5)} nextLabel={f4?'ดูผลลัพธ์ของคดี →':'ดูผลพวง →'}/>}
+      {scene===4&&f4&&<DocScene n={4} kicker="ปลายทางของคดี" title="ผลลัพธ์ตามหลักฐานที่คุณเก็บมา" note="คดีในเส้นทางที่คุณเลือกจบลงแบบนี้" f={f4} onNext={()=>setScene(4.5)} nextLabel="ดูผลพวง →"/>}
+      {scene===4.5&&<Interlude text="ผลพวงจากคำสั่งที่ 41 ไม่จบแค่นั้น แต่ยังคงส่งผลพวงตลอดมาถึงปัจจุบัน..." onDone={()=>setScene(5)}/>}
       {scene===5&&<Scene5 frags={r5.list} fallback={r5.fallback} onOpen={setModal} readIds={read5} markRead={id=>setRead5(r=>r.includes(id)?r:[...r,id])} onNext={()=>setScene(6)}/>}
       {scene===6&&<Board groups={groups} all={all} onRestart={restart} sheetStatus={sheetStatus}/>}
       {modal && <Sheet title="แฟ้มหลักฐาน" onClose={()=>setModal(null)}><Detail f={modal}/></Sheet>}
